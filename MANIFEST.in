@@ -1,0 +1,2 @@
+include *.rst *.txt
+recursive-include isotoma/recipe/apache *.cfg
