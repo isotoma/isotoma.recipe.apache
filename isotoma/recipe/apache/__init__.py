@@ -17,6 +17,13 @@ import os
 import zc.buildout
 from Cheetah.Template import Template
 
+try:
+    from hashlib import sha1
+except ImportError:
+    import sha
+    def sha1(str):
+        return sha.new(str)
+
 import htpasswd
 
 def sibpath(filename):
@@ -40,6 +47,9 @@ class Apache(object):
         self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         self.options.setdefault("configfile", os.path.join(self.outputdir, "apache.cfg"))
         self.options.setdefault("portal", "portal")
+
+        # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
+        self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
 
     def install(self):
         if not os.path.isdir(self.outputdir):
