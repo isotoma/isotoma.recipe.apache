@@ -31,9 +31,6 @@ def sibpath(filename):
 
 class Apache(object):
 
-    template = os.path.join(os.path.dirname(__file__), "apache.cfg")
-    ssltemplate = os.path.join(os.path.dirname(__file__), "apache-ssl.cfg")
-
     def __init__(self, buildout, name, options):
         self.name = name
         self.options = options

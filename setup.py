@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.0.8'
+version = '0.0.9'
 
 setup(
     name = 'isotoma.recipe.apache',
@@ -31,6 +31,7 @@ setup(
         'setuptools',
         'zc.buildout',
         'Cheetah',
+        'isotoma.recipe.gocaptain',
     ],
     entry_points = {
         "zc.buildout": [
