@@ -42,7 +42,7 @@ class Apache(object):
             default_template = "apache-ssl.cfg"
         else:
             default_template = "apache.cfg"
-        self.outputdir = os.path.join(self.buildout['buildout']['directory'], self.name)
+        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
         self.options.setdefault("template", sibpath(default_template))
         self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         self.options.setdefault("configfile", os.path.join(self.outputdir, "apache.cfg"))
