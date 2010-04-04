@@ -5,7 +5,9 @@ version = '0.0.9'
 setup(
     name = 'isotoma.recipe.apache',
     version = version,
-    description = "A suite of packages to manage a production deployment of medium-load web applications.",
+    description = "Buildout recipes for apache.",
+    url = "http://pypi.python.org/pypi/isotoma.recipe.apache",
+    project_url = "http://github.com/isotoma/recipes",
     long_description = open("README.rst").read() + "\n" + \
                        open("CHANGES.txt").read(),
     classifiers = [

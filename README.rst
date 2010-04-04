@@ -49,6 +49,13 @@ sslcert
 sslkey
     The full pathname of the key for the ssl certificate
 
+Repository
+----------
+
+This software is available from our `recipe repository`_ on github.
+
+.. _`recipe repository`: http://github.com/isotoma/recipes
+
 License
 -------
 
