@@ -1,13 +1,12 @@
 from setuptools import setup, find_packages
 
-version = '0.0.9'
+version = '0.0.10'
 
 setup(
     name = 'isotoma.recipe.apache',
     version = version,
     description = "Buildout recipes for apache.",
     url = "http://pypi.python.org/pypi/isotoma.recipe.apache",
-    project_url = "http://github.com/isotoma/recipes",
     long_description = open("README.rst").read() + "\n" + \
                        open("CHANGES.txt").read(),
     classifiers = [

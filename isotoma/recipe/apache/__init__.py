@@ -54,6 +54,7 @@ class Apache(object):
         opt = self.options.copy()
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
+        opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
         template = open(self.options['template']).read()
         cfgfilename = self.options['configfile']
         c = Template(template, searchList = opt)
