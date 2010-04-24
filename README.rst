@@ -48,6 +48,8 @@ sslcert
     The full pathname of the ssl certificate, if required
 sslkey
     The full pathname of the key for the ssl certificate
+auto-www
+    If true, the recipe will have a ServerAlias for www.${sitename}. If your sitename already has a www prefix, the alias will be sitename with the prefix trimmed.
 
 Repository
 ----------
