@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.0.11'
+version = '0.0.12'
 
 setup(
     name = 'isotoma.recipe.apache',
@@ -37,6 +37,7 @@ setup(
     entry_points = {
         "zc.buildout": [
             "default = isotoma.recipe.apache:Apache",
+            "standalone = isotoma.recipe.apache:Standalone",
         ],
     }
 )
