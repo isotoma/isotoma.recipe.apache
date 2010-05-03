@@ -42,6 +42,8 @@ class Apache(object):
             default_template = "apache.cfg"
         self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
         self.options.setdefault("logdir", "/var/log/apache2")
+        self.options.setdefault("http_port", "80")
+        self.options.setdefault("https_port", "443")
         self.options.setdefault("template", sibpath(default_template))
         self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         self.options.setdefault("configfile", os.path.join(self.outputdir, "apache.cfg"))
