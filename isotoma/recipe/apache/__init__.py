@@ -60,6 +60,14 @@ class Apache(object):
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
+        opt['protected'] = []
+        if 'protected' in self.options:
+            for l in self.options['protected'].strip().split("\n"):
+                l = l.strip()
+                opt['protected'].append(
+                    dict(zip(['uri', 'name', 'username', 'password'], 
+                             l.split(":"))
+                    ))
 
         # if we have auto-www on, add additional alias:
         if self.options.get("auto-www", "False") == "True":
@@ -72,13 +80,17 @@ class Apache(object):
         cfgfilename = self.options['configfile']
         c = Template(template, searchList = opt)
         open(cfgfilename, "w").write(str(c))
-        self.mkpasswd()
+        passwds = [(x['username'], x['password']) for x in opt['protected']]
+        if "password" in self.options:
+            passwds.append((self.options["username"], self.options["password"]))
+        self.mkpasswd(passwds)
         return [self.outputdir]
 
-    def mkpasswd(self):
-        if "password" in self.options:
+    def mkpasswd(self, passwds):
+        if passwds:
             pw = htpasswd.HtpasswdFile(self.options['passwdfile'], create=True)
-            pw.update(self.options["username"], self.options["password"])
+            for u, p in passwds:
+                pw.update(u, p)
             pw.save()
 
     def update(self):

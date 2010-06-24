@@ -52,6 +52,8 @@ auto-www
     If true, the recipe will have a ServerAlias for www.${sitename}. If your sitename already has a www prefix, the alias will be sitename with the prefix trimmed.
 logdir
     Where to store apache logs (Default: /var/log/apache2)
+protected
+    A list of locations to set a basic auth password on, should be a list of lines of the format: <URI>:<realm>:<username>:<password>
 
 Standalone httpd
 ----------------
