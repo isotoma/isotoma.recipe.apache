@@ -49,7 +49,7 @@ sslcert
 sslkey
     The full pathname of the key for the ssl certificate
 auto-www
-    If true, the recipe will have a ServerAlias for www.${sitename}. If your sitename already has a www prefix, the alias will be sitename with the prefix trimmed.
+    If true, the recipe will have a Redirect for www.${sitename}. If your sitename already has a www prefix, the alias will be sitename with the prefix trimmed.
 logdir
     Where to store apache logs (Default: /var/log/apache2)
 protected

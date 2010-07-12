@@ -60,6 +60,7 @@ class Apache(object):
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
+        opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
         opt['protected'] = []
         if 'protected' in self.options:
             for l in self.options['protected'].strip().split("\n"):
@@ -72,9 +73,9 @@ class Apache(object):
         # if we have auto-www on, add additional alias:
         if self.options.get("auto-www", "False") == "True":
             if opt['sitename'].startswith("www."):
-                opt['aliases'].append(opt['sitename'][4:])
+                opt['redirects'].append(opt['sitename'][4:])
             else:
-                opt['aliases'].append("www.%s" % opt['sitename'])
+                opt['redirects'].append("www.%s" % opt['sitename'])
 
         template = open(self.options['template']).read()
         cfgfilename = self.options['configfile']
