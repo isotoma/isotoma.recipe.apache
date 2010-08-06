@@ -23,7 +23,7 @@ setup(
     packages = find_packages(exclude=['ez_setup']),
     package_data = {
         '': ['README.rst', 'CHANGES.txt'],
-        'isotoma.recipe.apache': ['apache.cfg', 'apache-ssl.cfg']
+        'isotoma.recipe.apache': ['apache.cfg', 'apache-ssl.cfg', 'apache-redirect.cfg', 'standalone.cfg']
     },
     namespace_packages = ['isotoma', 'isotoma.recipe'],
     include_package_data = True,
@@ -37,6 +37,7 @@ setup(
     entry_points = {
         "zc.buildout": [
             "default = isotoma.recipe.apache:Apache",
+            "redirect = isotoma.recipe.apache:Redirect",
             "standalone = isotoma.recipe.apache:Standalone",
         ],
     }

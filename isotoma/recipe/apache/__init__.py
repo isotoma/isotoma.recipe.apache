@@ -99,6 +99,43 @@ class Apache(object):
         pass
 
 
+class Redirect(object):
+
+    def __init__(self, buildout, name, options):
+        self.buildout = buildout
+        self.name = name
+        self.options = options
+
+        options.setdefault("template", sibpath("apache-redirect.cfg"))
+        options.setdefault("configfile", os.path.join(buildout['buildout']['parts-directory'], name, "apache.cfg"))
+
+        # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
+        self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
+
+    def install(self):
+        outputdir, path = os.path.split(self.options["configfile"])
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        opt = self.options.copy()
+        for line in self.options['redirects'].strip().split("\n"):
+            line = line.strip()
+            opt['redirects'].append(
+                dict(zip(['domain', 'redirect'], 
+                         l.split(":"))
+                ))
+
+        template = open(self.options['template']).read()
+        cfgfilename = self.options['configfile']
+        c = Template(template, searchList = opt)
+        open(cfgfilename, "w").write(str(c))
+
+        return [outputdir]
+
+    def update(self):
+        pass
+
+
 class Standalone(object):
 
     def __init__(self, buildout, name, options):
