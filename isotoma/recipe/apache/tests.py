@@ -31,10 +31,13 @@ checker = renormalizing.RENormalizing([
 
 def test_suite():
     return unittest.TestSuite([
-        doctest.DocFileSuite('doctests/apache-redirect.txt',
+       doctest.DocFileSuite('doctests/apache.txt',
             setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
             optionflags=doctest.ELLIPSIS, checker=checker),
-        ])
+       doctest.DocFileSuite('doctests/apache-redirect.txt',
+            setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
+            optionflags=doctest.ELLIPSIS, checker=checker),
+       ])
 
 
 if __name__ == '__main__':
