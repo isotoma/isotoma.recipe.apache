@@ -1,0 +1,48 @@
+Detailed Description
+********************
+
+Simple creation of an apache config
+===================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache-redirect
+  ... offline = true
+  ...
+  ... [apache-redirect]
+  ... recipe = isotoma.recipe.apache:redirect
+  ... redirects =
+  ...     www.isotoma.com:http://www.isotoma.com/subdir
+  ... configfile = apache.cfg
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99:8080
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache-redirect.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:8080>
+      ServerName www.isotoma.com
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/www.isotoma.com-access.log combined
+      ErrorLog /var/log/apache2/www.isotoma.com-error.log
+  <BLANKLINE>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+      RewriteRule /(.*)$ http/$1 [R]
+  </VirtualHost>
+  <BLANKLINE>
+
+

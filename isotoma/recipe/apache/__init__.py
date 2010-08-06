@@ -15,7 +15,12 @@
 import logging
 import os
 import zc.buildout
+
+import warnings
+warnings.filterwarnings('ignore', '.*', UserWarning, 'Cheetah.Compiler', 1508)
+
 from Cheetah.Template import Template
+
 import isotoma.recipe.gocaptain as gocaptain
 
 try:
@@ -108,21 +113,28 @@ class Redirect(object):
 
         options.setdefault("template", sibpath("apache-redirect.cfg"))
         options.setdefault("configfile", os.path.join(buildout['buildout']['parts-directory'], name, "apache.cfg"))
+        options.setdefault("logdir", "/var/log/apache2")
 
         # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
         self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
 
     def install(self):
-        outputdir, path = os.path.split(self.options["configfile"])
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
 
-        opt = self.options.copy()
+        opt = {
+            "serveradmin": self.options["serveradmin"],
+            "logdir": self.options["logdir"],
+            "interface": self.options["interface"],
+            "redirects": [],
+            }
+
         for line in self.options['redirects'].strip().split("\n"):
             line = line.strip()
             opt['redirects'].append(
-                dict(zip(['domain', 'redirect'], 
-                         l.split(":"))
+                dict(zip(['domain', 'redirect'],
+                         line.split(":"))
                 ))
 
         template = open(self.options['template']).read()

@@ -34,6 +34,9 @@ setup(
         'Cheetah',
         'isotoma.recipe.gocaptain',
     ],
+    extras_require=dict(
+        test = ['zope.testing',],
+    ),
     entry_points = {
         "zc.buildout": [
             "default = isotoma.recipe.apache:Apache",
