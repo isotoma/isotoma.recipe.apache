@@ -55,8 +55,27 @@ logdir
 protected
     A list of locations to set a basic auth password on, should be a list of lines of the format: <URI>:<realm>:<username>:<password>
 
+
+
+Domain-level Redirects
+======================
+
+When using isotoma.recipe.apache:redirect you can listen on an interface and redirect any hits for a domain to any url.
+
+
+Mandatory Paramaters
+--------------------
+
+interface
+    The IP and port to listen on, e.g. 192.168.0.19:80
+serveradmin
+    The email address of the administrator of the server
+redirects
+    A list of domain;url pairs, seperated by ';'. E.g. www.isotoma.com;http://www.isotoma.com/foo
+
+
 Standalone httpd
-----------------
+================
 
 If you want to start and stop apache without needing root and can run apache on a high port, this recipe is for you.
 
@@ -67,7 +86,7 @@ group
 listen
     Any high ports this apache will listen on
 vhosts
-    A list of paths to the config you would normally have in /etc/apache2/sites-enabled
+    A list of paths to the config, e.g the vhosts you would normally have in /etc/apache2/sites-enabled
 
 Use ./bin/httpd start|stop to control the server, where httpd is the name of the part that is using the recipe.
 
