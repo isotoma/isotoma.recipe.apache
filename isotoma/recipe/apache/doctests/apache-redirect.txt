@@ -15,7 +15,7 @@ Lets create a minimal `buildout.cfg` file::
   ... [apache-redirect]
   ... recipe = isotoma.recipe.apache:redirect
   ... redirects =
-  ...     www.isotoma.com:http://www.isotoma.com/subdir
+  ...     www.isotoma.com;http://www.isotoma.com/subdir
   ... configfile = apache.cfg
   ... serveradmin = nobody@localhost
   ... interface = 192.168.0.99:8080
@@ -41,7 +41,7 @@ The template was indeed created::
       ProxyRequests Off
   <BLANKLINE>
       RewriteEngine On
-      RewriteRule /(.*)$ http/$1 [R]
+      RewriteRule /(.*)$ http://www.isotoma.com/subdir/$1 [R]
   </VirtualHost>
   <BLANKLINE>
 

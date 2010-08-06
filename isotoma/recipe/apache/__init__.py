@@ -134,7 +134,7 @@ class Redirect(object):
             line = line.strip()
             opt['redirects'].append(
                 dict(zip(['domain', 'redirect'],
-                         line.split(":"))
+                         line.split(";"))
                 ))
 
         template = open(self.options['template']).read()
