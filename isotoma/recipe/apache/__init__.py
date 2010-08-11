@@ -35,28 +35,45 @@ import htpasswd
 def sibpath(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
-class Apache(object):
+
+class ApacheBase(object):
 
     def __init__(self, buildout, name, options):
+        self.buildout = buildout
         self.name = name
         self.options = options
-        self.buildout = buildout
-        if "sslcert" in options:
-            default_template = "apache-ssl.cfg"
-        else:
-            default_template = "apache.cfg"
-        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
-        self.options.setdefault("logdir", "/var/log/apache2")
-        self.options.setdefault("http_port", "80")
-        self.options.setdefault("https_port", "443")
-        self.options.setdefault("namevirtualhost", "")
-        self.options.setdefault("template", sibpath(default_template))
-        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
-        self.options.setdefault("configfile", os.path.join(self.outputdir, "apache.cfg"))
-        self.options.setdefault("portal", "portal")
+
+        options.setdefault("template", sibpath(self.default_template))
+        options.setdefault("configfile", os.path.join(buildout['buildout']['parts-directory'], name, "apache.cfg"))
+
+        options.setdefault("logdir", "/var/log/apache2")
+        options.setdefault("http_port", "80")
+        options.setdefault("https_port", "443")
 
         # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
         self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
+
+    def write_config(self, opt):
+        template = open(self.options['template']).read()
+        cfgfilename = self.options['configfile']
+        c = Template(template, searchList = opt)
+        open(cfgfilename, "w").write(str(c))
+
+
+class Apache(ApacheBase):
+
+    def __init__(self, buildout, name, options):
+        if "sslcert" in options:
+            self.default_template = "apache-ssl.cfg"
+        else:
+            self.default_template = "apache.cfg"
+
+        super(Apache, self).__init__(buildout, name, options)
+
+        self.options.setdefault("namevirtualhost", "")
+        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
+        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
+        self.options.setdefault("portal", "portal")
 
     def install(self):
         if not os.path.isdir(self.outputdir):
@@ -67,6 +84,7 @@ class Apache(object):
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
         opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
+
         opt['protected'] = []
         if 'protected' in self.options:
             for l in self.options['protected'].strip().split("\n"):
@@ -83,14 +101,13 @@ class Apache(object):
             else:
                 opt['redirects'].append("www.%s" % opt['sitename'])
 
-        template = open(self.options['template']).read()
-        cfgfilename = self.options['configfile']
-        c = Template(template, searchList = opt)
-        open(cfgfilename, "w").write(str(c))
+        self.write_config(opt)
+
         passwds = [(x['username'], x['password']) for x in opt['protected']]
         if "password" in self.options:
             passwds.append((self.options["username"], self.options["password"]))
         self.mkpasswd(passwds)
+
         return [self.outputdir]
 
     def mkpasswd(self, passwds):
@@ -104,19 +121,47 @@ class Apache(object):
         pass
 
 
-class Redirect(object):
+class ApacheWSGI(ApacheBase):
+
+    default_template = "apache-wsgi.cfg"
 
     def __init__(self, buildout, name, options):
-        self.buildout = buildout
-        self.name = name
-        self.options = options
+        super(ApacheWSGI, self).__init__(buildout, name, options)
 
-        options.setdefault("template", sibpath("apache-redirect.cfg"))
-        options.setdefault("configfile", os.path.join(buildout['buildout']['parts-directory'], name, "apache.cfg"))
-        options.setdefault("logdir", "/var/log/apache2")
+        options.setdefault("aliases", "")
 
-        # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
-        self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
+    def install(self):
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        opt = self.options.copy()
+
+        if self.options["daemon"].lower() in ("yes", "true"):
+            opt["daemon"] = True
+        else:
+            opt["daemon"] = False
+
+        opt ['aliases'] = []
+        for line in self.options['aliases'].strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            opt['aliases'].append(
+                dict(zip(('location', 'path'), line.split(":"))
+                ))
+
+        self.write_config(opt)
+
+        return [outputdir]
+
+
+class Redirect(ApacheBase):
+
+    default_template = "apache-redirect.cfg"
+
+    def __init__(self, buildout, name, options):
+        super(Redirect, self).__init__(buildout, name, options)
 
     def install(self):
         outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
@@ -135,12 +180,9 @@ class Redirect(object):
             opt['redirects'].append(
                 dict(zip(['domain', 'redirect'],
                          line.split(";"))
-                ))
+                    ))
 
-        template = open(self.options['template']).read()
-        cfgfilename = self.options['configfile']
-        c = Template(template, searchList = opt)
-        open(cfgfilename, "w").write(str(c))
+        self.write_config(opt)
 
         return [outputdir]
 
