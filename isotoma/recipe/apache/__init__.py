@@ -138,12 +138,13 @@ class ApacheWSGI(ApacheBase):
         opt = self.options.copy()
         
         wsgi = opt['wsgi']
+        print wsgi
         if wsgi[0] == '/':
             # probably not a relative path in this case
             opt['wsgi'] = wsgi
         else:
             # relative path, make it a real path
-            wsgi = os.path.join(self.buildout['buildout']['bin-directory'], wsgi)
+            opt['wsgi'] = os.path.join(self.buildout['buildout']['bin-directory'], wsgi)
 
         if self.options["daemon"].lower() in ("yes", "true"):
             opt["daemon"] = True
