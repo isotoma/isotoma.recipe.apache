@@ -123,11 +123,15 @@ class Apache(ApacheBase):
 
 class ApacheWSGI(ApacheBase):
 
-    default_template = "apache-wsgi.cfg"
-
     def __init__(self, buildout, name, options):
+        
+        if "sslcert" in options:
+            self.default_template = "apache-wsgi-ssl.cfg"
+        else:
+            self.default_template = "apache-wsgi.cfg"
+        
         super(ApacheWSGI, self).__init__(buildout, name, options)
-
+        
         options.setdefault("aliases", "")
 
     def install(self):
@@ -159,6 +163,19 @@ class ApacheWSGI(ApacheBase):
             opt['aliases'].append(
                 dict(zip(('location', 'path'), line.split(":"))
                 ))
+
+        # SSL BELOW
+
+        # turn a list of sslca's into an actual list
+        opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
+        opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
+
+        # if we have auto-www on, add additional alias:
+        if self.options.get("auto-www", "False") == "True":
+            if opt['sitename'].startswith("www."):
+                opt['redirects'].append(opt['sitename'][4:])
+            else:
+                opt['redirects'].append("www.%s" % opt['sitename'])
 
         self.write_config(opt)
 
