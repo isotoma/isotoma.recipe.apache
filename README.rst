@@ -48,6 +48,10 @@ sslcert
     The full pathname of the ssl certificate, if required
 sslkey
     The full pathname of the key for the ssl certificate
+redirects
+    A list of other domains to forward to this domain
+rewrites
+    A list source;destination;flags that gets expanded to 'RewriteRule source destination [flags]'
 auto-www
     If true, the recipe will have a Redirect for www.${sitename}. If your sitename already has a www prefix, the alias will be sitename with the prefix trimmed.
 logdir

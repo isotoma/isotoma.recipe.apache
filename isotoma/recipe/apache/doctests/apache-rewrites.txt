@@ -19,6 +19,8 @@ Lets create a minimal `buildout.cfg` file::
   ... interface = 192.168.0.99:8080
   ... sitename = localhost
   ... proxyport = 8080
+  ... rewrites =
+  ...     ^/([0-9999]+)/([^.]+)\.htm$;/;R=301,L
   ... ''')
 
 Now we can run buildout::
@@ -47,6 +49,7 @@ The template was indeed created::
   <BLANKLINE>
       RewriteEngine On
   <BLANKLINE>
+      RewriteRule ^/([0-9999]+)/([^.]+)\.htm$ / [R=301,L]
   <BLANKLINE>
       RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/ [L,P]
   </VirtualHost>

@@ -101,6 +101,17 @@ class Apache(ApacheBase):
             else:
                 opt['redirects'].append("www.%s" % opt['sitename'])
 
+        opt['rewrites'] = []
+        for line in self.options.get('rewrites', '').strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            opt['rewrites'].append(
+                dict(zip(
+                    ['source', 'destination', 'flags'], line.split(";")
+                    ))
+                 )
+
         self.write_config(opt)
 
         passwds = [(x['username'], x['password']) for x in opt['protected']]
@@ -142,7 +153,6 @@ class ApacheWSGI(ApacheBase):
         opt = self.options.copy()
         
         wsgi = opt['wsgi']
-        print wsgi
         if wsgi[0] == '/':
             # probably not a relative path in this case
             opt['wsgi'] = wsgi
