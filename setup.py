@@ -42,6 +42,7 @@ setup(
             "default = isotoma.recipe.apache:Apache",
             "wsgi = isotoma.recipe.apache:ApacheWSGI",
             "redirect = isotoma.recipe.apache:Redirect",
+            "includes = isotoma.recipe.apache:Includes",
             "standalone = isotoma.recipe.apache:Standalone",
         ],
     }

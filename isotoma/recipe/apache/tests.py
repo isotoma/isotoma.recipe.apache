@@ -30,20 +30,21 @@ checker = renormalizing.RENormalizing([
 
 
 def test_suite():
-    return unittest.TestSuite([
-        doctest.DocFileSuite('doctests/apache.txt',
+    tests = [
+        "doctests/apache.txt",
+        "doctests/apache-rewrites.txt",
+        "doctests/apache-wsgi.txt",
+        "doctests/apache-redirect.txt",
+        "doctests/includes.txt",
+        ]
+
+    suites = []
+    for test in tests:
+        suites.append(doctest.DocFileSuite(test,
             setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
-            optionflags=doctest.ELLIPSIS, checker=checker),
-        doctest.DocFileSuite('doctests/apache-rewrites.txt',
-            setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
-            optionflags=doctest.ELLIPSIS, checker=checker),
-        doctest.DocFileSuite('doctests/apache-wsgi.txt',
-            setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
-            optionflags=doctest.ELLIPSIS, checker=checker),
-        doctest.DocFileSuite('doctests/apache-redirect.txt',
-            setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
-            optionflags=doctest.ELLIPSIS, checker=checker),
-      ])
+            optionflags=doctest.ELLIPSIS, checker=checker))
+
+    return unittest.TestSuite(suites)
 
 
 if __name__ == '__main__':

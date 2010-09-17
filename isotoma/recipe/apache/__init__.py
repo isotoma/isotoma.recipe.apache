@@ -226,6 +226,25 @@ class Redirect(ApacheBase):
         pass
 
 
+class Includes(ApacheBase):
+
+    default_template = "includes.cfg"
+
+    def install(self):
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        includes = []
+        for line in self.options['includes'].strip().split("\n"):
+            line = line.strip()
+            if line:
+                includes.append(line)
+
+        self.write_config(dict(includes=includes))
+
+        return [outputdir]
+
 class Standalone(object):
 
     def __init__(self, buildout, name, options):

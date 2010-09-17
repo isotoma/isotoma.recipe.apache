@@ -1,0 +1,36 @@
+Detailed Description
+********************
+
+Simple creation of an apache config
+===================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache
+  ... offline = true
+  ...
+  ... [apache]
+  ... recipe = isotoma.recipe.apache:includes
+  ... includes =
+  ...     /tmp/apache-en.cfg
+  ...     /tmp/apache-de.cfg
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache.
+
+The template was indeed created::
+
+  >>> cat('parts/apache/apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  Include /tmp/apache-en.cfg
+  Include /tmp/apache-de.cfg
+  <BLANKLINE>
+
+
