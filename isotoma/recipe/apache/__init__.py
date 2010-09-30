@@ -309,4 +309,42 @@ class Standalone(object):
     def update(self):
         pass
 
-
+class SinglePage(ApacheBase):
+    """ Used for generating emergency/maintenance page configs """
+    
+    default_template = "apache-single.cfg"
+    
+    def install(self):
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+            
+        opt = self.options.copy()
+        
+        file_path = opt['file_path']
+        if file_path[0] == '/':
+            # probably not a relative path in this case
+            opt['file_path'] = file_path
+        else:
+            # relative path, make it a real path
+            opt['file_path'] = os.path.join(self.buildout['buildout']['bin-directory'], file_path)
+            
+        
+        # this can't be missing, but it can be empty
+        if not opt.has_key('listen'):
+            opt['listen'] = ''
+            
+        # we might need to listen on multiple interfaces (if the whole lot has gone down)
+        opt['interfaces'] = []
+        for line in self.options['interfaces'].strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            opt['interfaces'].append(
+                dict(zip(('interface', 'port', 'servername',), line.split(":"))
+                ))
+            
+        self.write_config(opt)
+        
+        return [output_dir]
+        

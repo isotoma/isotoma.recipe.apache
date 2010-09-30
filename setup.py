@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.2.2'
+version = '0.3.0'
 
 setup(
     name = 'isotoma.recipe.apache',
@@ -44,6 +44,7 @@ setup(
             "redirect = isotoma.recipe.apache:Redirect",
             "includes = isotoma.recipe.apache:Includes",
             "standalone = isotoma.recipe.apache:Standalone",
+            "singlepage = isotoma.recipe.apache:SinglePage",
         ],
     }
 )
