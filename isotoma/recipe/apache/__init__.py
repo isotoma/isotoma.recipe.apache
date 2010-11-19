@@ -204,13 +204,8 @@ class Redirect(ApacheBase):
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
 
-        opt = {
-            "serveradmin": self.options["serveradmin"],
-            "logdir": self.options["logdir"],
-            "interface": self.options["interface"],
-            "redirects": [],
-            }
-
+        opt = self.options.copy()
+        opt['redirects'] = []
         for line in self.options['redirects'].strip().split("\n"):
             line = line.strip()
             opt['redirects'].append(

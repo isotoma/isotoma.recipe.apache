@@ -18,20 +18,21 @@ Lets create a minimal `buildout.cfg` file::
   ...     www.isotoma.com;http://www.isotoma.com/subdir
   ... configfile = apache.cfg
   ... serveradmin = nobody@localhost
-  ... interface = 192.168.0.99:8080
+  ... interface = 192.168.0.99
   ... ''')
 
 Now we can run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache-redirect.
+  Unused options for apache-redirect: 'interface' 'serveradmin'.
 
 The template was indeed created::
 
   >>> cat('apache.cfg')
   # vim: syntax=apache:
   <BLANKLINE>
-  <VirtualHost 192.168.0.99:8080>
+  <VirtualHost 192.168.0.99:80>
       ServerName www.isotoma.com
       ServerAdmin nobody@localhost
   <BLANKLINE>
@@ -44,5 +45,6 @@ The template was indeed created::
       RewriteRule /(.*)$ http://www.isotoma.com/subdir/$1 [R]
   </VirtualHost>
   <BLANKLINE>
-
+  <BLANKLINE>
+  <BLANKLINE>
 

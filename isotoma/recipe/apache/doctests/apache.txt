@@ -16,7 +16,7 @@ Lets create a minimal `buildout.cfg` file::
   ... recipe = isotoma.recipe.apache
   ... configfile = apache.cfg
   ... serveradmin = nobody@localhost
-  ... interface = 192.168.0.99:8080
+  ... interface = 192.168.0.99
   ... sitename = localhost
   ... proxyport = 8080
   ... ''')
@@ -33,7 +33,7 @@ The template was indeed created::
   # vim: syntax=apache:
   <BLANKLINE>
   <BLANKLINE>
-  <VirtualHost 192.168.0.99:8080:80>
+  <VirtualHost 192.168.0.99:80>
       ServerName localhost
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
@@ -43,15 +43,19 @@ The template was indeed created::
   <BLANKLINE>
   <BLANKLINE>
       ProxyPreserveHost On
+      <Proxy *>
+         Allow from all
+      </Proxy>
       ProxyRequests Off
   <BLANKLINE>
       RewriteEngine On
   <BLANKLINE>
   <BLANKLINE>
-      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/ [L,P]
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/$1 [L,P]
   </VirtualHost>
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
   # conditional, include lines
+
 
