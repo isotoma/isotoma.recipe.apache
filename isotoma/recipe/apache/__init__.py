@@ -47,9 +47,13 @@ class ApacheBase(object):
         options.setdefault("configfile", os.path.join(buildout['buildout']['parts-directory'], name, "apache.cfg"))
 
         options.setdefault("logdir", "/var/log/apache2")
-        options.setdefault("logformat", "combined")
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
+
+        if options.get("enhanced-privacy", None):
+            options.setdefault("logformat", '"0.0.0.0 %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-agent}i\\""')
+        else:
+            options.setdefault("logformat", "combined")
 
         # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
         self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()

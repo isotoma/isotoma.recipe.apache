@@ -60,7 +60,8 @@ logformat
     What apache logformat to use (Default: combined)
 protected
     A list of locations to set a basic auth password on, should be a list of lines of the format: <URI>:<realm>:<username>:<password>
-
+enhanced-privacy
+    Set to true to stop it logging IP addresses (Default: IP addresses are logged)
 
 Domain-level Redirects
 ======================
