@@ -346,5 +346,5 @@ class SinglePage(ApacheBase):
             
         self.write_config(opt)
         
-        return [output_dir]
+        return [outputdir]
         
