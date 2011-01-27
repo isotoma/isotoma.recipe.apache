@@ -20,6 +20,7 @@ import warnings
 warnings.filterwarnings('ignore', '.*', UserWarning, 'Cheetah.Compiler', 1508)
 
 from Cheetah.Template import Template
+from jinja2 import Environment, PackageLoader
 
 import isotoma.recipe.gocaptain as gocaptain
 
@@ -63,6 +64,15 @@ class ApacheBase(object):
         cfgfilename = self.options['configfile']
         c = Template(template, searchList = opt)
         open(cfgfilename, "w").write(str(c))
+        
+    def write_jinja_config(self, opt):
+        """ Write the config out, using the jinja2 templating method """
+        env = Environment(loader = PackageLoader('isotoma.recipe.apache', 'templates'))
+        cfgfilename = self.options['configfile']
+        template = env.get_template('apache-single.cfg')
+        rendered = template.render(opt)
+        open(cfgfilename, "w").write(str(c))
+        
 
 
 class Apache(ApacheBase):
@@ -341,8 +351,10 @@ class SinglePage(ApacheBase):
             if not line:
                 continue
             opt['interfaces'].append(
-                dict(zip(('interface', 'port', 'servername',), line.split(":"))
+                dict(zip(('interface', 'port', 'servername', 'ssl'), line.split(":"))
                 ))
+
+        opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
             
         self.write_config(opt)
         
