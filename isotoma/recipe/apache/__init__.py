@@ -34,7 +34,11 @@ except ImportError:
 import htpasswd
 
 def sibpath(filename):
-    return os.path.join(os.path.dirname(__file__), filename)
+    
+    main_dir = os.path.join(os.path.dirname(__file__), filename)
+    if os.path.exists(main_dir): return main_dir
+    template_dir = os.path.join(os.path.dirname(__file__), 'templates', filename)
+    if os.path.exists(template_dir): return template_dir
 
 
 class ApacheBase(object):
@@ -69,9 +73,9 @@ class ApacheBase(object):
         """ Write the config out, using the jinja2 templating method """
         env = Environment(loader = PackageLoader('isotoma.recipe.apache', 'templates'))
         cfgfilename = self.options['configfile']
-        template = env.get_template('apache-single.cfg')
+        template = env.get_template(self.default_template)
         rendered = template.render(opt)
-        open(cfgfilename, "w").write(str(c))
+        open(cfgfilename, "w").write(rendered)
         
 
 
@@ -356,7 +360,7 @@ class SinglePage(ApacheBase):
 
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
             
-        self.write_config(opt)
+        self.write_jinja_config(opt)
         
         return [outputdir]
         
