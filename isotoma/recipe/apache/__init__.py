@@ -155,8 +155,10 @@ class ApacheWSGI(ApacheBase):
 
     def __init__(self, buildout, name, options):
         
-        if "sslcert" in options:
+        if "sslcert" in options and not "sslonly" in options:
             self.default_template = "apache-wsgi-ssl.cfg"
+        elif "sslonly" in options and options['sslonly'].lower() == 'true':
+            self.default_template = "apache-wsgi-ssl-only.cfg"
         else:
             self.default_template = "apache-wsgi.cfg"
         
