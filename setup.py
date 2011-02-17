@@ -33,7 +33,7 @@ setup(
         'zc.buildout',
         'Cheetah',
         'isotoma.recipe.gocaptain',
-        'jinja2',
+        'Jinja2',
     ],
     extras_require=dict(
         test = ['zope.testing',],

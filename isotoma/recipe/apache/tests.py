@@ -18,6 +18,7 @@ def setUp(test):
     zc.buildout.testing.install('zope.testing', test)
     zc.buildout.testing.install('Cheetah', test)
     zc.buildout.testing.install('Markdown', test)
+    zc.buildout.testing.install('Jinja2', test)
 
 
 checker = renormalizing.RENormalizing([
