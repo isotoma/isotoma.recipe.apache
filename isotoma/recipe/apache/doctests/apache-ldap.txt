@@ -1,0 +1,44 @@
+Detailed Description
+********************
+
+Simple creation of an apache ldap config
+========================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache-ldap
+  ... offline = true
+  ...
+  ... [apache-ldap]
+  ... recipe = isotoma.recipe.apache:ldap
+  ... directory = /
+  ... username = Trac
+  ... configfile = apache-ldap.cfg
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache-ldap.
+  apache-ldap.cfg
+  Unused options for apache-ldap: 'directory' 'username'.
+
+The template was indeed created::
+
+  >>> cat('apache-ldap.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <location />
+      AuthType Basic
+      AuthName "Trac"
+      AuthBasicProvider ldap
+      AuthLDAPURL ldap://localhost/ou=staff,ou=groups,dc=isotoma,dc=com?uid?sub?(objectClass=*)
+      AuthzLDAPAuthoritative Off
+      AuthLDAPGroupAttribute memberUid
+      AuthLDAPGroupAttributeIsDN off
+      require valid-user
+  </location>
+  <BLANKLINE>

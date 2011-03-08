@@ -23,7 +23,7 @@ setup(
     packages = find_packages(exclude=['ez_setup']),
     package_data = {
         '': ['README.rst', 'CHANGES.txt'],
-        'isotoma.recipe.apache': ['apache.cfg', 'apache-ssl.cfg', 'apache-redirect.cfg', 'standalone.cfg']
+        'isotoma.recipe.apache': ['apache.cfg', 'apache-ssl.cfg', 'apache-redirect.cfg', 'standalone.cfg', 'apache-ldap.cfg']
     },
     namespace_packages = ['isotoma', 'isotoma.recipe'],
     include_package_data = True,
@@ -46,6 +46,7 @@ setup(
             "includes = isotoma.recipe.apache:Includes",
             "standalone = isotoma.recipe.apache:Standalone",
             "singlepage = isotoma.recipe.apache:SinglePage",
+            "ldap = isotoma.recipe.apache:Ldap",
         ],
     }
 )

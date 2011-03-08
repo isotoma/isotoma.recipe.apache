@@ -365,4 +365,26 @@ class SinglePage(ApacheBase):
         self.write_jinja_config(opt)
         
         return [outputdir]
-        
+ 
+class Ldap(ApacheBase):
+    """Configure stanza for protecting dir using LDAP"""
+
+    def __init__(self, buildout, name, options):
+        self.buildout = buildout
+        self.name = name
+        self.options = options
+        self.default_template = "apache-ldap.cfg"
+        options.setdefault("template", sibpath(self.default_template))
+
+
+    def install(self):
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+            
+        opt = self.options.copy()
+        print self.default_template
+        self.write_jinja_config(opt)  
+
+        return [outputdir]
+
