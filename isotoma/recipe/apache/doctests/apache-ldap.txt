@@ -17,6 +17,7 @@ Lets create a minimal `buildout.cfg` file::
   ... directory = /
   ... username = Trac
   ... configfile = apache-ldap.cfg
+  ... ldapserver = lexx
   ... ''')
 
 Now we can run buildout::
@@ -24,7 +25,7 @@ Now we can run buildout::
   >>> print system(join('bin', 'buildout')),
   Installing apache-ldap.
   apache-ldap.cfg
-  Unused options for apache-ldap: 'directory' 'username'.
+  Unused options for apache-ldap: 'username' 'ldapserver' 'directory'.
 
 The template was indeed created::
 
@@ -35,7 +36,7 @@ The template was indeed created::
       AuthType Basic
       AuthName "Trac"
       AuthBasicProvider ldap
-      AuthLDAPURL ldap://localhost/ou=staff,ou=groups,dc=isotoma,dc=com?uid?sub?(objectClass=*)
+      AuthLDAPURL ldap://lexx/ou=staff,ou=groups,dc=isotoma,dc=com?uid?sub?(objectClass=*)
       AuthzLDAPAuthoritative Off
       AuthLDAPGroupAttribute memberUid
       AuthLDAPGroupAttributeIsDN off
