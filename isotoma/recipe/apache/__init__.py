@@ -71,11 +71,18 @@ class ApacheBase(object):
         
     def write_jinja_config(self, opt):
         """ Write the config out, using the jinja2 templating method """
-        env = Environment(loader = PackageLoader('isotoma.recipe.apache', 'templates'))
         cfgfilename = self.options['configfile']
-        template = env.get_template(self.default_template)
-        rendered = template.render(opt)
+        rendered = self.get_jinja_config(opt)
         open(cfgfilename, "w").write(rendered)
+        
+    def get_jinja_config(self, opt, template = None):
+        env = Environment(loader = PackageLoader('isotoma.recipe.apache', 'templates'))
+        if template:
+            template = env.get_template(template)
+        else:
+            template = env.get_template(self.default_template)
+        rendered = template.render(opt)
+        return rendered
         
 
 
@@ -207,6 +214,12 @@ class ApacheWSGI(ApacheBase):
                 opt['redirects'].append(opt['sitename'][4:])
             else:
                 opt['redirects'].append("www.%s" % opt['sitename'])
+                
+        if opt.get('ldapserver', ''):
+            # include the ldap config
+            opt['ldap_info'] = self.get_jinja_config(opt, template = 'apache-ldap.cfg')
+        else:
+            opt['ldapserver'] = None
 
         self.write_config(opt)
 
