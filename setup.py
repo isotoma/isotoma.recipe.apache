@@ -47,6 +47,7 @@ setup(
             "standalone = isotoma.recipe.apache:Standalone",
             "singlepage = isotoma.recipe.apache:SinglePage",
             "ldap = isotoma.recipe.apache:Ldap",
+            "filter = isotoma.recipe.apache:Filter",
         ],
     }
 )

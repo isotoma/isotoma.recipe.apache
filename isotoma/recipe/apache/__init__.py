@@ -55,7 +55,7 @@ class ApacheBase(object):
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
 
-        if options.get("enhanced-privacy", None):
+        if options.get("enhanced-privacy", None).lower() in ('yes', 'true', 'on'):
             options.setdefault("logformat", '"0.0.0.0 %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-agent}i\\""')
         else:
             options.setdefault("logformat", "combined")
@@ -68,13 +68,13 @@ class ApacheBase(object):
         cfgfilename = self.options['configfile']
         c = Template(template, searchList = opt)
         open(cfgfilename, "w").write(str(c))
-        
+
     def write_jinja_config(self, opt):
         """ Write the config out, using the jinja2 templating method """
         cfgfilename = self.options['configfile']
         rendered = self.get_jinja_config(opt)
         open(cfgfilename, "w").write(rendered)
-        
+
     def get_jinja_config(self, opt, template = None):
         env = Environment(loader = PackageLoader('isotoma.recipe.apache', 'templates'))
         if template:
@@ -83,7 +83,7 @@ class ApacheBase(object):
             template = env.get_template(self.default_template)
         rendered = template.render(opt)
         return rendered
-        
+
 
 
 class Apache(ApacheBase):
