@@ -138,6 +138,10 @@ class Apache(ApacheBase):
                     ))
                  )
 
+        if self.options.get('filter', None):
+            filter = self.buildout[self.options['filter']]
+            opt['filter'] = filter['command']
+
         self.write_config(opt)
 
         passwds = [(x['username'], x['password']) for x in opt['protected']]
