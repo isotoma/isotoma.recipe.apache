@@ -1,0 +1,7 @@
+.installed.cfg
+bin/
+develop-eggs/
+eggs/
+isotoma.recipe.apache.egg-info/
+parts/
+*.pyc
