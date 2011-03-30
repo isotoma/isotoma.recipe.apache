@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import zc.recipe.egg
+import os, sys
+from zc.buildout import easy_install
 
 class Filter(object):
 

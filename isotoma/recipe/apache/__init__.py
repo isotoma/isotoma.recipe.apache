@@ -63,6 +63,12 @@ class ApacheBase(object):
         # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
         self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
 
+        # Prod the filter if we have one, to fix dependency graph
+        # Look into some better way of doing this after jinja2 refactor
+        filter = options.get("filter", None)
+        if filter:
+            buildout[filter]
+
     def write_config(self, opt):
         template = open(self.options['template']).read()
         cfgfilename = self.options['configfile']

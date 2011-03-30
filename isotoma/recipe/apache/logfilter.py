@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import optparse, os, stat, sys
+import optparse, os, stat, sys, re
+
+exp = r'(?<![\d\.])(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?![\d\.])'
 
 p = optparse.OptionParser()
 p.add_option("--partial", action="store_true")
@@ -22,14 +24,15 @@ opts, args = p.parse_args()
 class ReopeningFile(object):
 
     def __init__(self, file):
-        self.file = None
+        self.file = file
         self.fp = None
         self.st_dev = None
         self.st_ino = None
+        self.reopen()
 
     def stat(self):
         s = os.stat(self.file)
-        return s[ST_DEV], s[ST_INO]
+        return s[stat.ST_DEV], s[stat.ST_INO]
 
     def reopen(self):
         if self.fp:
@@ -49,26 +52,30 @@ class ReopeningFile(object):
         if self.changed():
             self.reopen()
         self.fp.write(data)
+        self.fp.flush()
 
+
+def regex_strip_ip(match):
+    return "0.0.0.0"
+
+def regex_partial_ip(match):
+    octets = match.group(0).split('.')
+    return ".".join((octets[0], octets[1], '0', '0'))
 
 def main():
     log = ReopeningFile(args[0])
 
+    ip_regex = re.compile(exp)
+
     # loop to sit reading from apache
     line = sys.stdin.readline()
     while line != '':
-        # replace the last 2 octets with 0
-        # this is done this way as its simple and less prone to failure...
-        try:
-            ip, rest = line.split(' ', 1)
+        if opts.partial:
+            filter = regex_partial_ip
+        else:
+            filter = regex_strip_ip
 
-            if opts.partial:
-                octet1, octet2 = ip.split('.', 2)[:2]
-                log.write('%s.%s.0.0 %s' % (octet1, octet2, rest))
-            else:
-                log.write('0.0.0.0 %s' % rest)
-        except:
-            pass
+        log.write(ip_regex.sub(filter, line))
 
         line = sys.stdin.readline()
 
