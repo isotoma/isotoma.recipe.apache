@@ -30,16 +30,14 @@ Now we can run buildout::
 The template was indeed created::
 
   >>> cat('apache-ldap.cfg')
-  # vim: syntax=apache:
-  <BLANKLINE>
-  <location />
-      AuthType Basic
-      AuthName "Trac"
-      AuthBasicProvider ldap
-      AuthLDAPURL ldap://lexx/ou=staff,ou=groups,dc=isotoma,dc=com?uid?sub?(objectClass=*)
-      AuthzLDAPAuthoritative Off
-      AuthLDAPGroupAttribute memberUid
-      AuthLDAPGroupAttributeIsDN off
-      require valid-user
-  </location>
-  <BLANKLINE>
+      <location />
+          AuthType Basic
+          AuthName "Trac"
+          AuthBasicProvider ldap
+          AuthLDAPURL ldap://lexx/ou=staff,ou=groups,dc=isotoma,dc=com?uid?sub?(objectClass=*)
+          AuthzLDAPAuthoritative Off
+          AuthLDAPGroupAttribute memberUid
+          AuthLDAPGroupAttributeIsDN off
+          require valid-user
+      </location>
+

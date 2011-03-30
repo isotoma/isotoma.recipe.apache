@@ -55,7 +55,7 @@ class ApacheBase(object):
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
 
-        if options.get("enhanced-privacy", None).lower() in ('yes', 'true', 'on'):
+        if options.get("enhanced-privacy", '').lower() in ('yes', 'true', 'on'):
             options.setdefault("logformat", '"0.0.0.0 %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-agent}i\\""')
         else:
             options.setdefault("logformat", "combined")

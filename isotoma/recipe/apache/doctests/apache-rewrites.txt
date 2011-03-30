@@ -38,6 +38,7 @@ The template was indeed created::
   <VirtualHost 192.168.0.99:80>
       ServerName localhost
       ServerAdmin nobody@localhost
+  <BLANKLINE>
       CustomLog /var/log/apache2/localhost-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/localhost-error.log

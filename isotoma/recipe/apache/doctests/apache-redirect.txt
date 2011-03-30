@@ -37,6 +37,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
   <BLANKLINE>
       CustomLog /var/log/apache2/www.isotoma.com-access.log combined
+  <BLANKLINE>
       ErrorLog /var/log/apache2/www.isotoma.com-error.log
   <BLANKLINE>
       ProxyRequests Off
