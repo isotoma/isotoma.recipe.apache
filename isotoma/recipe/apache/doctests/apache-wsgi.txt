@@ -149,3 +149,57 @@ The template was indeed created::
   </VirtualHost>
   <BLANKLINE>
 
+Pass Authorization
+=======
+
+If this is a django site you might want to use basic auth and access the headers with the username/password in
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache
+  ... offline = true
+  ...
+  ... [apache]
+  ... recipe = isotoma.recipe.apache:wsgi
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99:8080
+  ... sitename = localhost
+  ... daemon = yes
+  ... processgroup = site1
+  ... user = www-data
+  ... group = www-data
+  ... processes = 50
+  ... threads = 9001
+  ... wsgi = /bin/foo.wsgi
+  ... aliases =
+  ...     /static/:/var/local/sites/mysite/static
+  ... basicauth = yes
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Uninstalling apache.
+  Installing apache.
+
+The template was indeed created::
+
+  >>> cat('parts/apache/apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:8080:80>
+      ServerName localhost
+      ServerAdmin nobody@localhost
+      CustomLog /var/log/apache2/localhost-access.log combined
+      ErrorLog /var/log/apache2/localhost-error.log
+  <BLANKLINE>
+      WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
+      WSGIProcessGroup site1
+  <BLANKLINE>
+      Alias /static/ /var/local/sites/mysite/static
+  <BLANKLINE>
+      WSGIScriptAlias / /bin/foo.wsgi
+      WSGIPassAuthorization On
+  </VirtualHost>
+  <BLANKLINE>
