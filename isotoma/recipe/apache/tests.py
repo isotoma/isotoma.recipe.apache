@@ -22,7 +22,7 @@ def setUp(test):
 
 
 checker = renormalizing.RENormalizing([
-    zc.buildout.testing.normalize_path,
+    #zc.buildout.testing.normalize_path,
     (re.compile('#![^\n]+\n'), ''),
     (re.compile('-\S+-py\d[.]\d(-\S+)?.egg'),
      '-pyN.N.egg',
@@ -35,7 +35,8 @@ def test_suite():
         "doctests/apache.txt",
         "doctests/apache-rewrites.txt",
         "doctests/apache-wsgi.txt",
-        "doctests/apache-redirect.txt",
+        #"doctests/apache-redirect.txt",
+        "doctests/apache-redirect-additional-params.txt",
         "doctests/includes.txt",
         "doctests/apache-ldap.txt",
         ]

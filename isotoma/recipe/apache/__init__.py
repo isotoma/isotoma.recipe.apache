@@ -258,10 +258,11 @@ class Redirect(ApacheBase):
         for line in self.options['redirects'].strip().split("\n"):
             line = line.strip()
             opt['redirects'].append(
-                dict(zip(['domain', 'redirect'],
+                dict(zip(['domain', 'redirect', 'params'],
                          line.split(";"))
                     ))
-
+            if len(opt['redirects']) >= 1 and opt['redirects'][0].has_key('params'):
+                 opt['redirectparams'] = opt['redirects'][0]['params']
         self.write_config(opt)
 
         return [outputdir]
