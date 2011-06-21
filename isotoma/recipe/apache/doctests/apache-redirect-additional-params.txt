@@ -43,7 +43,7 @@ The template was indeed created::
       ProxyRequests Off
   <BLANKLINE>
       RewriteEngine On
-      RewriteRule /(.*)$ http://www.isotoma.com/subdir/$1 [R,QSA]
+      RewriteRule /(.*)$ http://www.isotoma.com/subdir$1 [R,QSA]
   </VirtualHost>
   <BLANKLINE>
   <BLANKLINE>
