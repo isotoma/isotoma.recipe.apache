@@ -116,6 +116,9 @@ class Apache(ApacheBase):
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
         opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
+        
+        # grab ssl chain file
+        opt['sslcachainfile'] = opt.get('sslcachainfile', '')
 
         opt['protected'] = []
         if 'protected' in self.options:

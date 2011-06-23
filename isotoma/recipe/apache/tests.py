@@ -39,6 +39,7 @@ def test_suite():
         "doctests/apache-redirect-additional-params.txt",
         "doctests/includes.txt",
         "doctests/apache-ldap.txt",
+        "doctests/apache-ssl.txt",
         ]
 
     suites = []

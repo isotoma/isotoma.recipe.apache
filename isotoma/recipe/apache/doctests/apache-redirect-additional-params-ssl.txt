@@ -1,0 +1,54 @@
+Detailed Description
+********************
+
+Simple creation of an apache config honouring url params
+========================================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache-redirect
+  ... offline = true
+  ...
+  ... [apache-redirect]
+  ... recipe = isotoma.recipe.apache:redirect
+  ... redirects =
+  ...     www.isotoma.com;http://www.isotoma.com/subdir;QSA
+  ... configfile = apache.cfg
+  ... sslcert = /etc/ssl/certs/www.example.com.crt
+  ... sslkey = /etc/ssl/private/www.example.com.key
+  ... sslcachainfile = /etc/ssl/certs/www.example.com-intermediates.crt
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache-redirect.
+  Unused options for apache-redirect: 'interface' 'serveradmin'.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+      ServerName www.isotoma.com
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/www.isotoma.com-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/www.isotoma.com-error.log
+  <BLANKLINE>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+      RewriteRule /(.*)$ http://www.isotoma.com/subdir$1 [R,QSA]
+  </VirtualHost>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+

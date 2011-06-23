@@ -1,0 +1,119 @@
+Detailed Description
+********************
+
+Simple creation of an apache config honouring url params
+========================================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache-ssl
+  ... offline = true
+  ...
+  ... [apache-ssl]
+  ... recipe = isotoma.recipe.apache
+  ... proxyport = 8080
+  ... sitename = www.example.com
+  ... redirects =
+  ...     another-example.com;https://www.example.com/another
+  ...     www.another-example.com;https://www.example.com/another
+  ... configfile = apache.cfg
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99
+  ... sslcert = /etc/ssl/certs/${:sitename}.crt
+  ... sslkey = /etc/ssl/private/${:sitename}.key
+  ... sslcachainfile = /etc/ssl/certs/${:sitename}-intermediates.crt
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache-ssl.
+  Unused options for apache-ssl: 'proxyport' 'redirects' 'sslkey' 'sslcachainfile' 'serveradmin' 'interface'.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+      ServerName www.example.com
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/www.example.com-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/www.example.com-error.log
+  <BLANKLINE>
+      ProxyRequests Off
+      RewriteEngine On
+      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+  </VirtualHost>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+  <BLANKLINE>
+      ServerName another-example.com;https://www.example.com/another
+  <BLANKLINE>
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/another-example.com;https://www.example.com/another-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/another-example.com;https://www.example.com/another-error.log
+  <BLANKLINE>
+      ProxyRequests Off 
+      RewriteEngine On
+  <BLANKLINE>
+      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+  <BLANKLINE>
+  </VirtualHost>
+  <VirtualHost 192.168.0.99:80>
+  <BLANKLINE>
+      ServerName www.another-example.com;https://www.example.com/another
+  <BLANKLINE>
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/www.another-example.com;https://www.example.com/another-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/www.another-example.com;https://www.example.com/another-error.log
+  <BLANKLINE>
+      ProxyRequests Off 
+      RewriteEngine On
+  <BLANKLINE>
+      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+  <BLANKLINE>
+  </VirtualHost>
+  <BLANKLINE>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:443>
+      ServerName www.example.com
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/ssl-www.example.com-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/ssl-www.example.com-error.log
+  <BLANKLINE>
+      SSLEngine on
+      SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+      SSLCertificateFile /etc/ssl/certs/www.example.com.crt
+      SSLCertificateKeyFile /etc/ssl/private/www.example.com.key
+  <BLANKLINE>
+      SSLCertificateChainFile /etc/ssl/certs/www.example.com-intermediates.crt
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      ProxyPreserveHost On
+      <Proxy *>
+        Allow from all
+      </Proxy>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+  <BLANKLINE>
+  <BLANKLINE>
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/https/www.example.com:443/portal/VirtualHostRoot/$1 [L,P]
+  </VirtualHost>
+  <BLANKLINE>
+  # conditional, include lines
