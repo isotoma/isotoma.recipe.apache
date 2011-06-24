@@ -36,6 +36,7 @@ def test_suite():
         "doctests/apache-rewrites.txt",
         "doctests/apache-wsgi.txt",
         "doctests/apache-redirect.txt",
+        "doctests/apache-redirect-ssl.txt",
         "doctests/apache-redirect-additional-params.txt",
         "doctests/includes.txt",
         "doctests/apache-ldap.txt",
