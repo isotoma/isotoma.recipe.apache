@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.5.9'
+version = '0.5.10'
 
 setup(
     name = 'isotoma.recipe.apache',
@@ -33,7 +33,7 @@ setup(
         'zc.buildout',
         'Cheetah',
         'isotoma.recipe.gocaptain',
-        'Jinja2',
+        'Jinja2==2.5.5',
     ],
     extras_require=dict(
         test = ['zope.testing',],

@@ -1,6 +1,11 @@
 ChangeLog for Apache Recipe
 ===========================
 
+0.5.10 (2011-07-13)
+------------------
+
+- Pinning Jinja to stop projects using this having to pin Jinja as well
+
 0.5.9 (2011-07-13)
 ------------------
 
