@@ -1,0 +1,8 @@
+ChangeLog for Apache Recipe
+===========================
+
+0.5.9 (2011-07-13)
+------------------
+
+- Pinned all versions and disabled buildout's allow-picked-verions
+  to stablise release from dependencies.
