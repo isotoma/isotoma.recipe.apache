@@ -237,7 +237,7 @@ class ApacheWSGI(ApacheBase):
         else:
             opt['ldapserver'] = None
 
-        self.write_config(opt)
+        self.write_jinja_config(opt)
 
         return [outputdir]
 
