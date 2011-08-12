@@ -264,7 +264,7 @@ class Redirect(ApacheBase):
                     ))
             if len(opt['redirects']) >= 1 and opt['redirects'][0].has_key('params'):
                  opt['redirectparams'] = opt['redirects'][0]['params']
-        self.write_config(opt)
+        self.write_jinja_config(opt)
 
         return [outputdir]
 
