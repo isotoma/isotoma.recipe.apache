@@ -34,9 +34,6 @@ setup(
         'Cheetah',
         'Jinja2==2.5.5',
     ],
-    extras_require=dict(
-        test = ['zope.testing',],
-    ),
     entry_points = {
         "zc.buildout": [
             "default = isotoma.recipe.apache:Apache",
