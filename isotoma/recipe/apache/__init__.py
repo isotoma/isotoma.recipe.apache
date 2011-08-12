@@ -287,7 +287,7 @@ class Includes(ApacheBase):
             if line:
                 includes.append(line)
 
-        self.write_config(dict(includes=includes))
+        self.write_jinja_config(dict(includes=includes))
 
         return [outputdir]
 
