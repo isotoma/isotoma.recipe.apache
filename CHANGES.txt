@@ -10,4 +10,5 @@ Changelog
  - Remove zope.testing from test dependencies
  - Remove Standalone
  - Define a 'body' block that can be overriden
+ - Tests now use difflib to give 'git diff' style output when there are problems
 
