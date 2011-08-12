@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.5.11'
+version = '0.6.0dev'
 
 setup(
     name = 'isotoma.recipe.apache',
@@ -11,10 +11,10 @@ setup(
                        open("CHANGES.txt").read(),
     classifiers = [
         "Framework :: Buildout",
+        "Framework :: Buildout :: Recipe",
         "Intended Audience :: System Administrators",
         "Operating System :: POSIX",
         "License :: OSI Approved :: Apache Software License",
-
     ],
     keywords = "proxy buildout apache",
     author = "Doug Winter",
@@ -31,20 +31,14 @@ setup(
     install_requires = [
         'setuptools',
         'zc.buildout',
-        'Cheetah',
-        'isotoma.recipe.gocaptain',
-        'Jinja2==2.5.5',
+        'Jinja2',
     ],
-    extras_require=dict(
-        test = ['zope.testing',],
-    ),
     entry_points = {
         "zc.buildout": [
             "default = isotoma.recipe.apache:Apache",
             "wsgi = isotoma.recipe.apache:ApacheWSGI",
             "redirect = isotoma.recipe.apache:Redirect",
             "includes = isotoma.recipe.apache:Includes",
-            "standalone = isotoma.recipe.apache:Standalone",
             "singlepage = isotoma.recipe.apache:SinglePage",
             "ldap = isotoma.recipe.apache:Ldap",
             "filter = isotoma.recipe.apache.filter:Filter",

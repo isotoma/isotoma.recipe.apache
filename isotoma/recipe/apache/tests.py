@@ -6,28 +6,38 @@ import pkg_resources
 
 import zc.buildout.testing
 
-import unittest
-import zope.testing
-from zope.testing import doctest, renormalizing
-
+import unittest, difflib
+import doctest
 
 def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)
     zc.buildout.testing.install_develop('isotoma.recipe.apache', test)
     zc.buildout.testing.install('isotoma.recipe.gocaptain', test)
-    zc.buildout.testing.install('zope.testing', test)
     zc.buildout.testing.install('Cheetah', test)
     zc.buildout.testing.install('Markdown', test)
     zc.buildout.testing.install('Jinja2', test)
 
 
-checker = renormalizing.RENormalizing([
-    #zc.buildout.testing.normalize_path,
-    (re.compile('#![^\n]+\n'), ''),
-    (re.compile('-\S+-py\d[.]\d(-\S+)?.egg'),
-     '-pyN.N.egg',
-    ),
-    ])
+class OutputChecker(doctest.OutputChecker):
+
+    regexp = re.compile('<BLANKLINE>\n')
+
+    def transform(self, inp):
+        inp = self.regexp.sub('', inp)
+        lines = [x.strip() for x in inp.split('\n') if x.strip()]
+        return lines
+
+    def check_output(self, want, got, optionflags):
+        want = '\n'.join(self.transform(want))
+        got = '\n'.join(self.transform(got))
+
+        return doctest.OutputChecker.check_output(self, want, got, optionflags)
+
+    def output_difference(self, example, got, optionflags):
+        want = self.transform(example.want)
+        got = self.transform(got)
+
+        return '\n'.join(difflib.unified_diff(want, got, "want", "got"))
 
 
 def test_suite():
@@ -47,7 +57,7 @@ def test_suite():
     for test in tests:
         suites.append(doctest.DocFileSuite(test,
             setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
-            optionflags=doctest.ELLIPSIS, checker=checker))
+            optionflags=doctest.ELLIPSIS + doctest.NORMALIZE_WHITESPACE, checker=OutputChecker()))
 
     return unittest.TestSuite(suites)
 

@@ -80,22 +80,6 @@ redirects
     A list of domain;url pairs, seperated by ';'. E.g. www.isotoma.com;http://www.isotoma.com/foo
 
 
-Standalone httpd
-================
-
-If you want to start and stop apache without needing root and can run apache on a high port, this recipe is for you.
-
-user
-    The user that will be running this apache
-group
-    The group that apache will run under
-listen
-    Any high ports this apache will listen on
-vhosts
-    A list of paths to the config, e.g the vhosts you would normally have in /etc/apache2/sites-enabled
-
-Use ./bin/httpd start|stop to control the server, where httpd is the name of the part that is using the recipe.
-
 Repository
 ----------
 
