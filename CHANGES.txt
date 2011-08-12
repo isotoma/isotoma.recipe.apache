@@ -5,5 +5,7 @@ Changelog
 ------------------
 
  - Move entirely to Jinja2
+ - Remove Cheetah
+ - Remove zope.testing from test dependencies
  - Remove Standalone
 

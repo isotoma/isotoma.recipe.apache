@@ -16,10 +16,6 @@ import logging
 import os
 import zc.buildout
 
-import warnings
-warnings.filterwarnings('ignore', '.*', UserWarning, 'Cheetah.Compiler', 1508)
-
-from Cheetah.Template import Template
 from jinja2 import Environment, PackageLoader
 
 try:
@@ -66,12 +62,6 @@ class ApacheBase(object):
         filter = options.get("filter", None)
         if filter:
             buildout[filter]
-
-    def write_config(self, opt):
-        template = open(self.options['template']).read()
-        cfgfilename = self.options['configfile']
-        c = Template(template, searchList = opt)
-        open(cfgfilename, "w").write(str(c))
 
     def write_jinja_config(self, opt):
         """ Write the config out, using the jinja2 templating method """

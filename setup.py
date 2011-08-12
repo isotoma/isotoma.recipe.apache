@@ -31,7 +31,6 @@ setup(
     install_requires = [
         'setuptools',
         'zc.buildout',
-        'Cheetah',
         'Jinja2==2.5.5',
     ],
     entry_points = {
