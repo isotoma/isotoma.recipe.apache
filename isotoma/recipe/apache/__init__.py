@@ -22,8 +22,6 @@ warnings.filterwarnings('ignore', '.*', UserWarning, 'Cheetah.Compiler', 1508)
 from Cheetah.Template import Template
 from jinja2 import Environment, PackageLoader
 
-import isotoma.recipe.gocaptain as gocaptain
-
 try:
     from hashlib import sha1
 except ImportError:
@@ -293,69 +291,6 @@ class Includes(ApacheBase):
 
         return [outputdir]
 
-class Standalone(object):
-
-    def __init__(self, buildout, name, options):
-        self.buildout = buildout
-        self.name = name
-        self.options = options
-
-        for opt in ("user", "group", "listen"):
-            if not opt in self.options:
-                raise ValueError("'%s' must be set" % opt)
-                #raise UserError("'%s' must be set" % opt)
-
-        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
-        self.options.setdefault("template", sibpath("standalone.cfg"))
-        self.options.setdefault("configfile", os.path.join(self.outputdir, "standalone.cfg"))
-
-        self.options.setdefault("executable", "/usr/sbin/apache2")
-        vardir = os.path.join(self.buildout['buildout']['directory'], "var")
-        self.options.setdefault("pidfile", os.path.join(vardir, "%s.pid" % self.name))
-        self.options.setdefault("lockfile", os.path.join(vardir, "%s.lock" % self.name))
-
-        self.options.setdefault("errorlog", os.path.join(vardir, "%s_error.log" % self.name))
-        self.options.setdefault("customlog", os.path.join(vardir, "%s_other_vhosts_access.log" % self.name))
-
-        # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
-        self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
-
-    def install(self):
-        if not os.path.isdir(self.outputdir):
-            os.mkdir(self.outputdir)
-            self.options.created(self.outputdir)
-
-        opt = self.options.copy()
-
-        # Tidy up lists
-        opt['vhosts'] = [x.strip() for x in self.options.get("vhosts").strip().split()]
-        opt['listen'] = [x.strip() for x in self.options.get("listen").strip().split()]
-
-        template = open(self.options['template']).read()
-        c = Template(template, searchList = opt)
-        cfgfilename = self.options['configfile']
-        open(cfgfilename, "w").write(str(c))
-        self.options.created(cfgfilename)
-
-        self.runscript()
-
-        return self.options.created()
-
-    def runscript(self):
-        target=os.path.join(self.buildout["buildout"]["bin-directory"],self.name)
-        args = '-f "%s"' % self.options["configfile"]
-        gc = gocaptain.Automatic()
-        gc.write(open(target, "wt"),
-                 daemon=self.options['executable'],
-                 args=args,
-                 pidfile=self.options["pidfile"],
-                 name=self.name,
-                 description="%s daemon" % self.name)
-        os.chmod(target, 0755)
-        self.options.created(target)
-
-    def update(self):
-        pass
 
 class SinglePage(ApacheBase):
     """ Used for generating emergency/maintenance page configs """

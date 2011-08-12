@@ -1,0 +1,9 @@
+Changelog
+=========
+
+0.6.0 (unreleased)
+------------------
+
+ - Move entirely to Jinja2
+ - Remove Standalone
+

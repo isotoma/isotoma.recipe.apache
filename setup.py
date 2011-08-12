@@ -32,7 +32,6 @@ setup(
         'setuptools',
         'zc.buildout',
         'Cheetah',
-        'isotoma.recipe.gocaptain',
         'Jinja2==2.5.5',
     ],
     extras_require=dict(
@@ -44,7 +43,6 @@ setup(
             "wsgi = isotoma.recipe.apache:ApacheWSGI",
             "redirect = isotoma.recipe.apache:Redirect",
             "includes = isotoma.recipe.apache:Includes",
-            "standalone = isotoma.recipe.apache:Standalone",
             "singlepage = isotoma.recipe.apache:SinglePage",
             "ldap = isotoma.recipe.apache:Ldap",
             "filter = isotoma.recipe.apache.filter:Filter",
