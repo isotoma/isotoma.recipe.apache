@@ -38,6 +38,8 @@ The template was indeed created::
           AuthzLDAPAuthoritative Off
           AuthLDAPGroupAttribute memberUid
           AuthLDAPGroupAttributeIsDN off
+          AuthLDAPBindDN cn=admin,dc=isotoma,dc=com
+  <BLANKLINE>
           require valid-user
       </location>
 
