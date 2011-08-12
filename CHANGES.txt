@@ -9,4 +9,5 @@ Changelog
  - Remove Cheetah
  - Remove zope.testing from test dependencies
  - Remove Standalone
+ - Define a 'body' block that can be overriden
 
