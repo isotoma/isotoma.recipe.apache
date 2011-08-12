@@ -11,10 +11,10 @@ setup(
                        open("CHANGES.txt").read(),
     classifiers = [
         "Framework :: Buildout",
+        "Framework :: Buildout :: Recipe",
         "Intended Audience :: System Administrators",
         "Operating System :: POSIX",
         "License :: OSI Approved :: Apache Software License",
-
     ],
     keywords = "proxy buildout apache",
     author = "Doug Winter",
