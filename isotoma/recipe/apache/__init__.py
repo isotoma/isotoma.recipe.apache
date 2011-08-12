@@ -151,7 +151,7 @@ class Apache(ApacheBase):
             filter = self.buildout[self.options['filter']]
             opt['filter'] = filter['command']
 
-        self.write_config(opt)
+        self.write_jinja_config(opt)
 
         passwds = [(x['username'], x['password']) for x in opt['protected']]
         if "password" in self.options:
