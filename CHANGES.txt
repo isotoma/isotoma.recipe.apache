@@ -4,6 +4,7 @@ Changelog
 0.6.0 (unreleased)
 ------------------
 
+ - Don't hard code Jinja2 dependency
  - Move entirely to Jinja2
  - Remove Cheetah
  - Remove zope.testing from test dependencies

@@ -31,7 +31,7 @@ setup(
     install_requires = [
         'setuptools',
         'zc.buildout',
-        'Jinja2==2.5.5',
+        'Jinja2',
     ],
     entry_points = {
         "zc.buildout": [
