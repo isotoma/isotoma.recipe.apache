@@ -82,7 +82,7 @@ class ApacheBase(object):
 
 class Apache(ApacheBase):
 
-    default_template = "apache-ssl.cfg"
+    default_template = "apache.cfg"
 
     def __init__(self, buildout, name, options):
         super(Apache, self).__init__(buildout, name, options)
