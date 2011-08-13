@@ -83,7 +83,13 @@ class ApacheBase(object):
 class Apache(ApacheBase):
 
     def __init__(self, buildout, name, options):
-        if "sslcert" in options:
+        ssl = options.get("ssl", "auto")
+
+        if ssl == "auto":
+            if "sslcert" in options:
+                ssl = "on"
+
+        if ssl.lower() in ("true", "on", "yes"):
             self.default_template = "apache-ssl.cfg"
         else:
             self.default_template = "apache.cfg"

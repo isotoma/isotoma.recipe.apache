@@ -42,6 +42,9 @@ template
     The filename of the template file to use, if you do not wish to use the default
 configfile
     The name of the config file written by the recipe, defaults to "apache.cfg" in the part directory
+ssl
+    Should ssl be on or off. By default this isn't needed, setting the ssl options is enough
+    to turn it on. Useful to force SSL off, even if your base buildout set defaults.
 sslca
     A list of full pathnames to certificate authority certificate files
 sslcert

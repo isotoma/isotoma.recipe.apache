@@ -11,4 +11,5 @@ Changelog
  - Remove Standalone
  - Define a 'body' block that can be overriden
  - Tests now use difflib to give 'git diff' style output when there are problems
+ - Add an ssl flag so we can provide sensible ssl defaults but still turn it on and off
 
