@@ -75,7 +75,7 @@ class ApacheBase(object):
             PackageLoader('isotoma.recipe.apache', 'templates'),
             ])
 
-        template = Environment(loader=loader).get_template(template or self.default_template)
+        template = Environment(loader=loader).get_template(template or self.options['template'])
         return template.render(opt)
 
 
