@@ -12,9 +12,6 @@ import doctest
 def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)
     zc.buildout.testing.install_develop('isotoma.recipe.apache', test)
-    zc.buildout.testing.install('isotoma.recipe.gocaptain', test)
-    zc.buildout.testing.install('Cheetah', test)
-    zc.buildout.testing.install('Markdown', test)
     zc.buildout.testing.install('Jinja2', test)
 
 
