@@ -28,11 +28,7 @@ except ImportError:
 import htpasswd
 
 def sibpath(filename):
-    
-    main_dir = os.path.join(os.path.dirname(__file__), filename)
-    if os.path.exists(main_dir): return main_dir
-    template_dir = os.path.join(os.path.dirname(__file__), 'templates', filename)
-    if os.path.exists(template_dir): return template_dir
+    return os.path.join(os.path.dirname(__file__), 'templates', filename)
 
 
 class ApacheBase(object):
