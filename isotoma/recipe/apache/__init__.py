@@ -82,18 +82,9 @@ class ApacheBase(object):
 
 class Apache(ApacheBase):
 
+    default_template = "apache-ssl.cfg"
+
     def __init__(self, buildout, name, options):
-        ssl = options.get("ssl", "auto")
-
-        if ssl == "auto":
-            if "sslcert" in options:
-                ssl = "on"
-
-        if ssl.lower() in ("true", "on", "yes"):
-            self.default_template = "apache-ssl.cfg"
-        else:
-            self.default_template = "apache.cfg"
-
         super(Apache, self).__init__(buildout, name, options)
 
         self.options.setdefault("namevirtualhost", "")
@@ -105,6 +96,13 @@ class Apache(ApacheBase):
         if not os.path.isdir(self.outputdir):
             os.mkdir(self.outputdir)
         opt = self.options.copy()
+
+        ssl = self.options.get("ssl", "auto")
+        if ssl == "auto":
+            if "sslcert" in self.options:
+                ssl = "on"
+
+        opt['ssl'] = ssl.lower() in ("on", "true", "yes")
 
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
