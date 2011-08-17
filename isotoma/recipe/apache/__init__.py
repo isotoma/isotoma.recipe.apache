@@ -216,6 +216,8 @@ class ApacheWSGI(ApacheBase):
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
+        # grab ssl chain file
+        opt['sslcachainfile'] = opt.get('sslcachainfile', '')
 
         # if we have auto-www on, add additional alias:
         if self.options.get("auto-www", "False") == "True":
