@@ -4,19 +4,7 @@ Changelog
 0.6.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-0.6.2 (2011-08-17)
-------------------
-
-- Nothing changed yet.
-
-
-0.6.1 (2011-08-17)
-------------------
-
-- Nothing changed yet.
+- Don't turn on auth if realm is empty
 
 
 0.6.0 (2011-08-13)
