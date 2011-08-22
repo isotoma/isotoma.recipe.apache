@@ -164,12 +164,8 @@ class Apache(ApacheBase):
 
 class ApacheWSGI(ApacheBase):
     def __init__(self, buildout, name, options):
-        if "sslcert" in options and not "sslonly" in options:
-            self.default_template = "apache-wsgi-ssl.cfg"
-        elif "sslonly" in options and options['sslonly'].lower() == 'true':
-            self.default_template = "apache-wsgi-ssl-only.cfg"
-        else:
-            self.default_template = "apache-wsgi.cfg"
+
+        self.default_template = "apache-wsgi.cfg"
         
         super(ApacheWSGI, self).__init__(buildout, name, options)
         
@@ -202,12 +198,12 @@ class ApacheWSGI(ApacheBase):
             else:
                 opt["basicauth"] = False
 
-        opt ['aliases'] = []
-        for line in self.options['aliases'].strip().split("\n"):
+        opt['static_aliases'] = []
+        for line in self.options.get('static_aliases', "").strip().split("\n"):
             line = line.strip()
             if not line:
                 continue
-            opt['aliases'].append(
+            opt['static_aliases'].append(
                 dict(zip(('location', 'path'), line.split(":"))
                 ))
 

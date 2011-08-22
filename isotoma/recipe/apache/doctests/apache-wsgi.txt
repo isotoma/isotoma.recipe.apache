@@ -43,6 +43,7 @@ The template was indeed created::
       WSGIScriptAlias / /bin/foo.wsgi
   </VirtualHost>
   <BLANKLINE>
+  # conditional, include lines
 
 
 Using the deamon mode
@@ -94,6 +95,7 @@ The template was indeed created::
       WSGIScriptAlias / /bin/foo.wsgi
   </VirtualHost>
   <BLANKLINE>
+  # conditional, include lines
 
 
 Aliases
@@ -119,7 +121,7 @@ If this is a django site you might want to have apache serve your static directo
   ... processes = 50
   ... threads = 9001
   ... wsgi = /bin/foo.wsgi
-  ... aliases =
+  ... static_aliases =
   ...     /static/:/var/local/sites/mysite/static
   ... ''')
 
@@ -148,6 +150,7 @@ The template was indeed created::
       WSGIScriptAlias / /bin/foo.wsgi
   </VirtualHost>
   <BLANKLINE>
+  # conditional, include lines
 
 Pass Authorization
 =======
@@ -172,7 +175,7 @@ If this is a django site you might want to use basic auth and access the headers
   ... processes = 50
   ... threads = 9001
   ... wsgi = /bin/foo.wsgi
-  ... aliases =
+  ... static_aliases =
   ...     /static/:/var/local/sites/mysite/static
   ... basicauth = yes
   ... ''')
@@ -203,3 +206,5 @@ The template was indeed created::
       WSGIPassAuthorization On
   </VirtualHost>
   <BLANKLINE>
+  # conditional, include lines
+
