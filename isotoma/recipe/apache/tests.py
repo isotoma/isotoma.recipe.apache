@@ -42,7 +42,7 @@ def test_suite():
         "doctests/apache.txt",
         "doctests/apache-rewrites.txt",
         "doctests/apache-wsgi.txt",
-        #"doctests/apache-wsgi-ssl.txt",
+        "doctests/apache-wsgi-ssl.txt",
         #"doctests/apache-wsgi-ssl-only.txt",
         "doctests/apache-redirect.txt",
         "doctests/apache-redirect-ssl.txt",
