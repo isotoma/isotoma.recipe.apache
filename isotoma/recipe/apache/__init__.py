@@ -16,7 +16,7 @@ import logging
 import os
 import zc.buildout
 
-from jinja2 import Environment, PackageLoader, ChoiceLoader, FunctionLoader
+from jinja2 import Environment, PackageLoader, ChoiceLoader, FunctionLoader, FileSystemLoader
 
 try:
     from hashlib import sha1
@@ -61,8 +61,17 @@ class ApacheBase(object):
 
     def write_jinja_config(self, opt):
         """ Write the config out, using the jinja2 templating method """
+        dirname, basename = os.path.split(self.options['template'])
+
+        loader = ChoiceLoader([
+            FileSystemLoader(dirname),
+            PackageLoader('isotoma.recipe.apache', 'templates'),
+            ])
+
+        template = Environment(loader=loader).get_template(basename)
+        rendered = template.render(opt)
+
         cfgfilename = self.options['configfile']
-        rendered = self.get_jinja_config(opt)
         open(cfgfilename, "w").write(rendered)
 
     def get_jinja_config(self, opt, template=None):
