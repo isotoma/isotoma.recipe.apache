@@ -4,7 +4,7 @@ Changelog
 0.6.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- SSL now works with WSGI using either the 'protected' argument for multiple 'Location's or the 'realm', 'username', 'password' for '<Location />'
 
 
 0.6.5 (2011-08-24)
