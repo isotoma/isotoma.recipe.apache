@@ -29,7 +29,7 @@ Let's add some basic authentication for <Location />::
   ... basicauth = true
   ... static_aliases =
   ...     /static/ /goo/bob/static
-  ... passwdfile = /tmp/passwords
+  ... passwdfile = /tmp/apache-wsgi-auth-passwords
   ... username = testusername
   ... password = testpassword
   ... realm = something somewhere
@@ -58,7 +58,7 @@ Let's check that the template was created::
           allow from all
           AuthType Basic
           AuthName "something somewhere"
-          AuthUserFile /tmp/passwords
+          AuthUserFile /tmp/apache-wsgi-auth-passwords
           Require user testusername
       </Location>
   <BLANKLINE>
@@ -72,3 +72,9 @@ Let's check that the template was created::
   </VirtualHost>
   <BLANKLINE>
   # conditional, include lines
+
+And check that the passwd file was created::
+
+  >>> import os
+  >>> os.path.exists('/tmp/apache-wsgi-auth-passwords')
+  True

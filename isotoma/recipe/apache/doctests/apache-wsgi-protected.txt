@@ -28,7 +28,7 @@ Add two protected areas to test the "protected" option::
   ... wsgi = /path/to/trac.wsgi
   ... static_aliases =
   ...     /static/ /goo/bob/static
-  ... passwdfile = /tmp/passwords
+  ... passwdfile = /tmp/apache-wsgi-protected-passwords
   ... protected =
   ...     /admin:site admin:myuser:mypassword
   ...     /userarea:user area:auser:apassword
@@ -55,7 +55,7 @@ Let's check that the template was created::
           allow from all
           AuthType Basic
           AuthName "site admin"
-          AuthUserFile /tmp/passwords
+          AuthUserFile /tmp/apache-wsgi-protected-passwords
           Require user myuser
       </Location>
       <Location /userarea>
@@ -63,7 +63,7 @@ Let's check that the template was created::
           allow from all
           AuthType Basic
           AuthName "user area"
-          AuthUserFile /tmp/passwords
+          AuthUserFile /tmp/apache-wsgi-protected-passwords
           Require user auser
       </Location>
   <BLANKLINE>
@@ -75,3 +75,9 @@ Let's check that the template was created::
       WSGIScriptAlias / /path/to/trac.wsgi
   </VirtualHost>
   # conditional, include lines
+
+Check for the existence of the password file::
+
+  >>> import os
+  >>> os.path.exists('/tmp/apache-wsgi-protected-passwords')
+  True
