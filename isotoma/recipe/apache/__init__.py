@@ -30,6 +30,14 @@ import htpasswd
 def sibpath(filename):
     return os.path.join(os.path.dirname(__file__), 'templates', filename)
 
+def is_true(val):
+    synonyms = (
+        'on',
+        'true',
+        'yes',
+        'enabled',
+    )
+    return val.lower() in synonyms
 
 class ApacheBase(object):
 
@@ -110,7 +118,7 @@ class Apache(ApacheBase):
             if "sslcert" in self.options:
                 ssl = "on"
 
-        opt['ssl'] = ssl.lower() in ("on", "true", "yes")
+        opt['ssl'] = is_true(ssl)
 
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
