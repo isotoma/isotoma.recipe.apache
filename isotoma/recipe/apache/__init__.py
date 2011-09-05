@@ -95,6 +95,43 @@ class ApacheBase(object):
         template = Environment(loader=loader).get_template(template or self.options['template'])
         return template.render(opt)
 
+    def mkpasswd(self, protected_opt):
+        passwds = [(x['username'], x['password']) for x in protected_opt]
+        if "password" in self.options:
+            passwds.append((
+                self.options["username"],
+                self.options["password"]
+            ))
+
+        if passwds:
+            pw = htpasswd.HtpasswdFile(self.options['passwdfile'], create=True)
+            for u, p in passwds:
+                pw.update(u, p)
+            pw.save()
+
+
+    def use_protection(self):
+        '''
+        Specify multiple URIs for basicauth protection::
+
+            [apache-protected]
+            recipe = isotoma.recipe.apache
+            protected =
+                /path/to/whatever:realm name:username:password
+            <SNIP>
+
+        '''
+        protected = []
+        if self.options.has_key('protected'):
+            for l in self.options['protected'].strip().split("\n"):
+                l = l.strip()
+                protected.append(dict(
+                    zip(['uri', 'name', 'username', 'password'],
+                        l.split(":"))
+                ))
+
+        return protected
+
 
 class Apache(ApacheBase):
 
@@ -128,14 +165,8 @@ class Apache(ApacheBase):
         # grab ssl chain file
         opt['sslcachainfile'] = opt.get('sslcachainfile', '')
 
-        opt['protected'] = []
-        if 'protected' in self.options:
-            for l in self.options['protected'].strip().split("\n"):
-                l = l.strip()
-                opt['protected'].append(
-                    dict(zip(['uri', 'name', 'username', 'password'], 
-                             l.split(":"))
-                    ))
+        # Deal with authentication
+        opt['protected'] = self.use_protection()
 
         # if we have auto-www on, add additional alias:
         if self.options.get("auto-www", "False") == "True":
@@ -161,31 +192,25 @@ class Apache(ApacheBase):
 
         self.write_jinja_config(opt)
 
-        passwds = [(x['username'], x['password']) for x in opt['protected']]
-        if "password" in self.options:
-            passwds.append((self.options["username"], self.options["password"]))
-        self.mkpasswd(passwds)
+        # Write the password file
+        self.mkpasswd(opt['protected'])
 
         return [self.outputdir]
-
-    def mkpasswd(self, passwds):
-        if passwds:
-            pw = htpasswd.HtpasswdFile(self.options['passwdfile'], create=True)
-            for u, p in passwds:
-                pw.update(u, p)
-            pw.save()
 
     def update(self):
         pass
 
 
 class ApacheWSGI(ApacheBase):
-    def __init__(self, buildout, name, options):
 
-        self.default_template = "apache-wsgi.cfg"
+    default_template = "apache-wsgi.cfg"
+
+    def __init__(self, buildout, name, options):
         
         super(ApacheWSGI, self).__init__(buildout, name, options)
         
+        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
+        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         options.setdefault("aliases", "")
 
     def install(self):
@@ -214,6 +239,8 @@ class ApacheWSGI(ApacheBase):
                 opt["basicauth"] = True
             else:
                 opt["basicauth"] = False
+
+        opt['protected'] = self.use_protection()
 
         opt['static_aliases'] = []
         for line in self.options.get('static_aliases', "").strip().split("\n"):
@@ -246,6 +273,8 @@ class ApacheWSGI(ApacheBase):
             opt['ldapserver'] = None
 
         self.write_jinja_config(opt)
+
+        self.mkpasswd(opt['protected'])
 
         return [outputdir]
 
