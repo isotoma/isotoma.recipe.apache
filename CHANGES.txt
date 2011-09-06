@@ -4,7 +4,8 @@ Changelog
 0.6.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix WSGI static_aliases to add a newline between each.
+- Improve output formatting of basic_auth option
 
 0.6.6 (2011-09-05)
 ------------------
