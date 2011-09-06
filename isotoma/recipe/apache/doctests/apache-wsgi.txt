@@ -177,6 +177,7 @@ If this is a django site you might want to use basic auth and access the headers
   ... wsgi = /bin/foo.wsgi
   ... static_aliases =
   ...     /static/:/var/local/sites/mysite/static
+  ...     /admin/media/:/var/local/sites/mysite/admin/media
   ... basicauth = yes
   ... ''')
 
@@ -201,6 +202,7 @@ The template was indeed created::
       WSGIProcessGroup site1
   <BLANKLINE>
       Alias /static/ /var/local/sites/mysite/static
+      Alias /admin/media/ /var/local/sites/mysite/admin/media
   <BLANKLINE>
       WSGIScriptAlias / /bin/foo.wsgi
       WSGIPassAuthorization On
