@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.7 (unreleased)
+0.6.7 (2011-09-06)
 ------------------
 
 - Fix WSGI static_aliases to add a newline between each.
