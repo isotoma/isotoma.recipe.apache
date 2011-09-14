@@ -156,7 +156,7 @@ class Apache(ApacheBase):
                 ssl = "on"
 
         if ssl == "only":
-            opts['ssl'] = 'only'
+            opt['ssl'] = 'only'
         else:
             opt['ssl'] = is_true(ssl)
 
