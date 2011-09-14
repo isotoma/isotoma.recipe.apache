@@ -4,7 +4,7 @@ Changelog
 0.6.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Support ${:ssl} 'only' option, to turn off the HTTP -> HTTP redirect
 
 
 0.6.7 (2011-09-06)

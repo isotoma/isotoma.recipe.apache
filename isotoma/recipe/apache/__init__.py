@@ -155,13 +155,16 @@ class Apache(ApacheBase):
             if "sslcert" in self.options:
                 ssl = "on"
 
-        opt['ssl'] = is_true(ssl)
+        if ssl == "only":
+            opts['ssl'] = 'only'
+        else:
+            opt['ssl'] = is_true(ssl)
 
         # turn a list of sslca's into an actual list
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
         opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
         opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
-        
+
         # grab ssl chain file
         opt['sslcachainfile'] = opt.get('sslcachainfile', '')
 
