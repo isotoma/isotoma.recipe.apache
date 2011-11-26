@@ -38,7 +38,7 @@ Run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache-protected.
-  Unused options for apache-protected: 'processgroup' 'processes' 'group' 'sitename' 'wsgi' 'threads' 'serveradmin' 'interface' 'user'.
+  Unused options for apache-protected: 'processgroup' 'group' 'sitename' 'processes' 'wsgi' 'threads' 'serveradmin' 'interface' 'user'.
 
 Let's check that the template was created::
 
