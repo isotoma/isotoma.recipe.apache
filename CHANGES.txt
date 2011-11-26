@@ -71,7 +71,7 @@ Changelog
  - Merge apache and apache-ssl into a single template
 
 0.5.10 (2011-07-13)
-------------------
+-------------------
 
 - Pinning Jinja to stop projects using this having to pin Jinja as well
 
