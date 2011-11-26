@@ -60,15 +60,15 @@ Changelog
 0.6.0 (2011-08-13)
 ------------------
 
- - Don't hard code Jinja2 dependency
- - Move entirely to Jinja2
- - Remove Cheetah
- - Remove zope.testing from test dependencies
- - Remove Standalone
- - Define a 'body' block that can be overriden
- - Tests now use difflib to give 'git diff' style output when there are problems
- - Add an ssl flag so we can provide sensible ssl defaults but still turn it on and off
- - Merge apache and apache-ssl into a single template
+- Don't hard code Jinja2 dependency
+- Move entirely to Jinja2
+- Remove Cheetah
+- Remove zope.testing from test dependencies
+- Remove Standalone
+- Define a 'body' block that can be overriden
+- Tests now use difflib to give 'git diff' style output when there are problems
+- Add an ssl flag so we can provide sensible ssl defaults but still turn it on and off
+- Merge apache and apache-ssl into a single template
 
 0.5.10 (2011-07-13)
 -------------------
