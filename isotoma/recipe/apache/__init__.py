@@ -58,6 +58,8 @@ class ApacheBase(object):
         else:
             options.setdefault("logformat", "combined")
 
+        options.setdefault("indexes", "off")
+
         # Record a SHA1 of the template we use, so we can detect changes in subsequent runs
         self.options["__hashes_template"] = sha1(open(self.options["template"]).read()).hexdigest()
 
@@ -274,6 +276,9 @@ class ApacheWSGI(ApacheBase):
             opt['ldap_info'] = self.get_jinja_config(opt, template = 'apache-ldap.cfg')
         else:
             opt['ldapserver'] = None
+
+
+        opt["indexes"] = self.options.get("indexes", "on") in ("on", "yes", "true")
 
         self.write_jinja_config(opt)
 
