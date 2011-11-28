@@ -1,10 +1,12 @@
 Changelog
 =========
 
-0.6.11 (unreleased)
+0.6.11 (2011-11-28)
 -------------------
 
-- Nothing changed yet.
+- Lots of template whitespace removal to produce more legible apache configs.
+- Fixed bug where RewriteRule directives were being concatenated on a single
+  line.
 
 
 0.6.10 (2011-11-26)
