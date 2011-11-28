@@ -25,7 +25,7 @@ Now we can run buildout::
   >>> print system(join('bin', 'buildout')),
   Installing apache-ldap.
   apache-ldap.cfg
-  Unused options for apache-ldap: 'directory' 'username' 'ldapserver'.
+  Unused options for apache-ldap: 'username' 'ldapserver' 'directory'.
 
 The template was indeed created::
 

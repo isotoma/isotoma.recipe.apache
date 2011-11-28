@@ -39,7 +39,7 @@ Now let's run buildout::
 
   >>> print system(join('bin', 'buildout'))
   Installing apache.
-  Unused options for apache: 'processgroup' 'group' 'sitename' 'processes' 'wsgi' 'threads' 'serveradmin' 'interface' 'realm' 'user'.
+  Unused options for apache: 'processgroup' 'processes' 'realm' 'sitename' 'wsgi' 'threads' 'serveradmin' 'interface' 'group' 'user'.
 
 
 Let's check that the template was created::
