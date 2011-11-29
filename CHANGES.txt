@@ -1,10 +1,13 @@
 Changelog
 =========
 
-0.6.12 (unreleased)
+0.6.12 (2011-11-29)
 -------------------
 
-- Nothing changed yet.
+- Fixed an issue with PURGE not being received if basic authentication is
+  enabled.
+- Added an "indexes" option to the wsgi recipe to limit access to directory
+  indexes unless "indexes = on".
 
 
 0.6.11 (2011-11-28)
