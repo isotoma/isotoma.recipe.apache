@@ -37,6 +37,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      Options -Indexes
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
@@ -87,6 +88,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
       WSGIProcessGroup site1
@@ -141,6 +143,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
       WSGIProcessGroup site1
@@ -197,6 +200,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
       WSGIProcessGroup site1

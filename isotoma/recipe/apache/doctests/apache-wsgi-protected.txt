@@ -66,6 +66,7 @@ Let's check that the template was created::
           AuthUserFile /tmp/apache-wsgi-protected-passwords
           Require user auser
       </Location>
+      Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess btrscheduler user=btrscheduler group=btrscheduler processes=5 threads=15
       WSGIProcessGroup btrscheduler

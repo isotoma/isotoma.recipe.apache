@@ -64,6 +64,7 @@ The template was indeed created::
       SSLCertificateFile /etc/ssl/certs/example.com.crt
       SSLCertificateKeyFile /etc/ssl/private/example.com.key
       SSLCertificateChainFile /etc/ssl/certs/example.com-intermediates.crt
+      Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
       WSGIProcessGroup site1
