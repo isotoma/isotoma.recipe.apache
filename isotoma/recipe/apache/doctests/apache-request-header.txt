@@ -1,0 +1,65 @@
+Detailed Description
+********************
+
+Set RequestHeader from buildout
+===============================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache
+  ... offline = true
+  ...
+  ... [apache]
+  ... recipe = isotoma.recipe.apache
+  ... configfile = apache.cfg
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99
+  ... sitename = localhost
+  ... proxyport = 8080
+  ... requestheader.plone_skin = Sunburst
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache.
+  Unused options for apache: 'proxyport' 'sitename' 'serveradmin' 'interface'.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+      ServerName localhost
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/localhost-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/localhost-error.log
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  RequestHeader set plone_skin "Sunburst"
+  <BLANKLINE>
+      ProxyPreserveHost On
+      <Proxy *>
+         Allow from all
+      </Proxy>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+  <BLANKLINE>
+  <BLANKLINE>
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/$1 [L,P]
+  </VirtualHost>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  # conditional, include lines
+
+

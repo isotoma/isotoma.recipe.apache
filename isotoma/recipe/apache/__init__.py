@@ -69,6 +69,15 @@ class ApacheBase(object):
         if filter:
             buildout[filter]
 
+    def get_requestheader(self):
+        vals = {}
+        for key in self.options:
+            if key.startswith("requestheader."):
+                k = key[len('requestheader.'):]
+                v = self.options[key]
+                vals[k] = v
+        return vals
+
     def write_jinja_config(self, opt):
         """ Write the config out, using the jinja2 templating method """
         dirname, basename = os.path.split(self.options['template'])
@@ -190,6 +199,8 @@ class Apache(ApacheBase):
                     ['source', 'destination', 'flags'], line.split(";")
                     ))
                  )
+
+        opt['requestheader'] = self.get_requestheader()
 
         if self.options.get('filter', None):
             filter = self.buildout[self.options['filter']]

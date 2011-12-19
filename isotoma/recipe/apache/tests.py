@@ -41,6 +41,7 @@ def test_suite():
     tests = [
         "doctests/apache.txt",
         "doctests/apache-rewrites.txt",
+        "doctests/apache-request-header.txt",
         "doctests/apache-wsgi.txt",
         "doctests/apache-wsgi-ssl.txt",
         "doctests/apache-wsgi-auth.txt",
