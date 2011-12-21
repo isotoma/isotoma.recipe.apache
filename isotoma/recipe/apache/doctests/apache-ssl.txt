@@ -31,7 +31,7 @@ Now we can run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache-ssl.
-  Unused options for apache-ssl: 'proxyport' 'redirects' 'sslkey' 'sslcachainfile' 'serveradmin' 'interface'.
+  Unused options for apache-ssl: ...
 
 The template was indeed created::
 
