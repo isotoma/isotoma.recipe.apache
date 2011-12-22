@@ -53,6 +53,11 @@ class ApacheBase(object):
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
 
+        self.options.setdefault("namevirtualhost", "")
+
+        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
+        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
+
         if options.get("enhanced-privacy", '').lower() in ('yes', 'true', 'on'):
             options.setdefault("logformat", '"0.0.0.0 %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-agent}i\\""')
         else:
@@ -151,9 +156,6 @@ class Apache(ApacheBase):
     def __init__(self, buildout, name, options):
         super(Apache, self).__init__(buildout, name, options)
 
-        self.options.setdefault("namevirtualhost", "")
-        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
-        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         self.options.setdefault("portal", "portal")
 
     def install(self):
