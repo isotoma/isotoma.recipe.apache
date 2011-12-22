@@ -53,6 +53,11 @@ class ApacheBase(object):
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
 
+        self.options.setdefault("namevirtualhost", "")
+
+        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
+        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
+
         if options.get("enhanced-privacy", '').lower() in ('yes', 'true', 'on'):
             options.setdefault("logformat", '"0.0.0.0 %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-agent}i\\""')
         else:
@@ -143,6 +148,62 @@ class ApacheBase(object):
 
         return protected
 
+    def use_ssl(self):
+        ssl = self.options.get("ssl", "auto")
+
+        if ssl == "auto":
+            if "sslcert" in self.options:
+                return "on"
+
+        if ssl == "only":
+            return "only"
+        else:
+            return is_true(ssl)
+
+    def configure_ssl(self):
+        ssldict = {}
+        if self.use_ssl():
+            # turn a list of sslca's into an actual list
+            ssldict["sslca"] = [x.strip() for x in self.options.get("sslca", "").strip().split()]
+            ssldict["aliases"] = [x.strip() for x in self.options.get("aliases", "").strip().split()]
+            ssldict["redirects"] = [x.strip() for x in self.options.get("redirects", "").strip().split()]
+
+            # grab ssl chain file
+            ssldict["sslcachainfile"] = self.options.get("sslcachainfile", "")
+
+        return ssldict
+
+    def configure_auto_www(self, rewrite_list):
+        """Appends an auto-www rewrite to the rewrites list"""
+        if is_true(self.options.get("auto-www", "False")):
+            if self.options.get("sitename").startswith("www."):
+                rewrite_list.append(self.options.get("sitename")[4:])
+            else:
+                rewrite_list.append("www.%s" % self.options.get("sitename"))
+
+    def configure_rewrites(self):
+        rewrites = []
+        for line in self.options.get('rewrites', '').strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            rewrites.append(
+                dict(zip(
+                    ['source', 'destination', 'flags'], line.split(";")
+                    ))
+                 )
+        return rewrites
+
+    def configure_static_aliases(self):
+        static_aliases = []
+        for line in self.options.get('static_aliases', "").strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            static_aliases.append(dict(zip(('location', 'path'), line.split(":"))))
+
+        return static_aliases
+
 
 class Apache(ApacheBase):
 
@@ -151,9 +212,6 @@ class Apache(ApacheBase):
     def __init__(self, buildout, name, options):
         super(Apache, self).__init__(buildout, name, options)
 
-        self.options.setdefault("namevirtualhost", "")
-        self.outputdir = os.path.join(self.buildout['buildout']['parts-directory'], self.name)
-        self.options.setdefault("passwdfile", os.path.join(self.outputdir, "passwd"))
         self.options.setdefault("portal", "portal")
 
     def install(self):
@@ -161,44 +219,16 @@ class Apache(ApacheBase):
             os.mkdir(self.outputdir)
         opt = self.options.copy()
 
-        ssl = self.options.get("ssl", "auto")
-        if ssl == "auto":
-            if "sslcert" in self.options:
-                ssl = "on"
-
-        if ssl == "only":
-            opt['ssl'] = 'only'
-        else:
-            opt['ssl'] = is_true(ssl)
-
-        # turn a list of sslca's into an actual list
-        opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
-        opt['aliases'] = [x.strip() for x in opt.get('aliases', '').strip().split()]
-        opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
-
-        # grab ssl chain file
-        opt['sslcachainfile'] = opt.get('sslcachainfile', '')
+        # SSL, if required
+        opt = dict(opt.items() + self.configure_ssl().items())
 
         # Deal with authentication
-        opt['protected'] = self.use_protection()
+        opt["protected"] = self.use_protection()
+
+        opt['rewrites'] = self.configure_rewrites()
 
         # if we have auto-www on, add additional alias:
-        if self.options.get("auto-www", "False") == "True":
-            if opt['sitename'].startswith("www."):
-                opt['redirects'].append(opt['sitename'][4:])
-            else:
-                opt['redirects'].append("www.%s" % opt['sitename'])
-
-        opt['rewrites'] = []
-        for line in self.options.get('rewrites', '').strip().split("\n"):
-            line = line.strip()
-            if not line:
-                continue
-            opt['rewrites'].append(
-                dict(zip(
-                    ['source', 'destination', 'flags'], line.split(";")
-                    ))
-                 )
+        self.configure_auto_www(opt["rewrites"])
 
         opt['requestheader'] = self.get_requestheader()
 
@@ -258,45 +288,26 @@ class ApacheWSGI(ApacheBase):
 
         opt['protected'] = self.use_protection()
 
-        opt['static_aliases'] = []
-        for line in self.options.get('static_aliases', "").strip().split("\n"):
-            line = line.strip()
-            if not line:
-                continue
-            opt['static_aliases'].append(
-                dict(zip(('location', 'path'), line.split(":"))
-                ))
+        opt['static_aliases'] = self.configure_static_aliases()
 
-        # SSL BELOW
+        opt = dict(opt.items() + self.configure_ssl().items())
 
-        # turn a list of sslca's into an actual list
-        opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
-        opt['redirects'] = [x.strip() for x in opt.get('redirects', '').strip().split()]
-        # grab ssl chain file
-        opt['sslcachainfile'] = opt.get('sslcachainfile', '')
+        opt["rewrites"] = self.configure_rewrites()
+        self.configure_auto_www(opt["rewrites"])
 
-        # if we have auto-www on, add additional alias:
-        if self.options.get("auto-www", "False") == "True":
-            if opt['sitename'].startswith("www."):
-                opt['redirects'].append(opt['sitename'][4:])
-            else:
-                opt['redirects'].append("www.%s" % opt['sitename'])
-                
         if opt.get('ldapserver', ''):
             # include the ldap config
             opt['ldap_info'] = self.get_jinja_config(opt, template = 'apache-ldap.cfg')
         else:
             opt['ldapserver'] = None
 
-
-        opt["indexes"] = self.options.get("indexes", "on") in ("on", "yes", "true")
+        opt["indexes"] = is_true(self.options.get("indexes", "on"))
 
         self.write_jinja_config(opt)
 
         self.mkpasswd(opt['protected'])
 
         return [outputdir]
-
 
 class Redirect(ApacheBase):
 
@@ -327,7 +338,6 @@ class Redirect(ApacheBase):
     def update(self):
         pass
 
-
 class Includes(ApacheBase):
 
     default_template = "includes.cfg"
@@ -347,19 +357,18 @@ class Includes(ApacheBase):
 
         return [outputdir]
 
-
 class SinglePage(ApacheBase):
     """ Used for generating emergency/maintenance page configs """
-    
+
     default_template = "apache-single.cfg"
-    
+
     def install(self):
         outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
-            
+
         opt = self.options.copy()
-        
+
         file_path = opt['file_path']
         if file_path[0] == '/':
             # probably not a relative path in this case
@@ -367,12 +376,12 @@ class SinglePage(ApacheBase):
         else:
             # relative path, make it a real path
             opt['file_path'] = os.path.join(self.buildout['buildout']['bin-directory'], file_path)
-            
-        
+
+
         # this can't be missing, but it can be empty
         if not opt.has_key('listen'):
             opt['listen'] = ''
-            
+
         # we might need to listen on multiple interfaces (if the whole lot has gone down)
         opt['interfaces'] = []
         for line in self.options['interfaces'].strip().split("\n"):
@@ -386,9 +395,9 @@ class SinglePage(ApacheBase):
         opt['sslca'] = [x.strip() for x in opt.get("sslca", "").strip().split()]
             
         self.write_jinja_config(opt)
-        
+
         return [outputdir]
- 
+
 class Ldap(ApacheBase):
     """Configure stanza for protecting dir using LDAP"""
 

@@ -22,6 +22,7 @@ Lets create a minimal `buildout.cfg` file::
   ... configfile = apache.cfg
   ... serveradmin = nobody@localhost
   ... interface = 192.168.0.99
+  ... ssl = on
   ... sslcert = /etc/ssl/certs/${:sitename}.crt
   ... sslkey = /etc/ssl/private/${:sitename}.key
   ... sslcachainfile = /etc/ssl/certs/${:sitename}-intermediates.crt
@@ -31,7 +32,7 @@ Now we can run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache-ssl.
-  Unused options for apache-ssl: 'proxyport' 'redirects' 'sslkey' 'sslcachainfile' 'serveradmin' 'interface'.
+  Unused options for apache-ssl: ...
 
 The template was indeed created::
 
