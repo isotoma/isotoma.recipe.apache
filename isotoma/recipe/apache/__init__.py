@@ -309,6 +309,39 @@ class ApacheWSGI(ApacheBase):
 
         return [outputdir]
 
+class ApacheMaintenance(ApacheBase):
+
+    default_template = "apache-maintenance.cfg"
+
+    def __init__(self, buildout, name, options):
+        super(ApacheMaintenance, self).__init__(buildout, name, options)
+        options.setdefault("copy-files", "")
+        options.setdefault("maintenance_page", "index.html")
+
+    def install(self):
+        outputdir, path = os.path.split(os.path.realpath(self.options["configfile"]))
+        paths = []
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir)
+
+        if self.options.get("copy-files", None):
+            # Copy the maintenance page files into parts
+            dest = os.path.join(buildout["parts-directory"], name)
+            if not os.path.exists(dest):
+                os.mkdir(dest)
+
+            shutil.copytree(self.options.get("copy-files"), dest)
+            self.options["document_root"] = dest
+            paths += [dest]
+
+        self.write_jinja_config(self.options)
+
+        return paths
+
+    def update(self):
+        pass
+
+
 class Redirect(ApacheBase):
 
     default_template = "apache-redirect.cfg"
