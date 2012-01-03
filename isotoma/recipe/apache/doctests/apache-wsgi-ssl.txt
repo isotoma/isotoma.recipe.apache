@@ -16,7 +16,7 @@ Now we can test that the SSL stanzas can be added
   ... [apache]
   ... recipe = isotoma.recipe.apache:wsgi
   ... serveradmin = nobody@localhost
-  ... interface = 192.168.0.99:8080
+  ... interface = 192.168.0.99
   ... sitename = localhost
   ... daemon = yes
   ... processgroup = site1
@@ -45,7 +45,7 @@ The template was indeed created::
   >>> cat('parts/apache/apache.cfg')
   # vim: syntax=apache:
   <BLANKLINE>
-  <VirtualHost 192.168.0.99:8080:80>
+  <VirtualHost 192.168.0.99:80>
       ServerName localhost
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
@@ -53,7 +53,7 @@ The template was indeed created::
       RewriteEngine On
       RewriteRule /(.*)$ https://localhost/$1 [R]
   </VirtualHost>
-  <VirtualHost 192.168.0.99:8080:443>
+  <VirtualHost 192.168.0.99:443>
       ServerName localhost
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/ssl-localhost-access.log combined

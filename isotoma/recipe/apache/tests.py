@@ -52,6 +52,7 @@ def test_suite():
         "doctests/includes.txt",
         "doctests/apache-ldap.txt",
         "doctests/apache-ssl.txt",
+        "doctests/apache-maintenance.txt",
         ]
 
     suites = []

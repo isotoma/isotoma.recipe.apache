@@ -1,0 +1,59 @@
+Create le buildout::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = apache-maintenance
+    ... offline = true
+    ...
+    ... [apache-maintenance]
+    ... recipe = isotoma.recipe.apache:maintenance
+    ... serveradmin = nobody@localhost
+    ... interface = 209.85.229.99
+    ... sitename = example.com
+    ... document_root = /var/www
+    ... maintenance_page = index.html
+    ... namevirtualhost = on
+    ... ssl = on
+    ... sslcert = /foo/bar/baz.crt
+    ... sslkey = /foo/bar/baz.key
+    ... ''')
+
+Now we can run buildout::
+
+    >>> print system(join('bin', 'buildout'))
+    Installing apache-maintenance.
+
+    >>> cat('parts/apache-maintenance/apache.cfg')
+    # vim: syntax=apache:
+    NameVirtualHost 209.85.229.99:80
+    NameVirtualHost 209.85.229.99:443
+    <BLANKLINE>
+    <VirtualHost 209.85.229.99:80>
+        ServerName example.com
+        ServerAdmin nobody@localhost
+        CustomLog /var/log/apache2/example.com-access.log combined
+        ErrorLog /var/log/apache2/example.com-error.log
+        RewriteEngine On
+        RewriteRule /(.*)$ https://example.com/$1 [R] 
+    </VirtualHost>
+    <BLANKLINE>
+    <VirtualHost 209.85.229.99:443>
+        ServerName example.com
+        ServerAdmin nobody@localhost
+        CustomLog /var/log/apache2/ssl-example.com-access.log combined
+        ErrorLog /var/log/apache2/ssl-example.com-error.log
+    <BLANKLINE>
+        SSLEngine on
+        SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+        SSLCertificateFile /foo/bar/baz.crt
+        SSLCertificateKeyFile /foo/bar/baz.key
+    <BLANKLINE>
+        DocumentRoot /var/www
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+        RewriteCond %{ENV:REDIRECT_STATUS} !=503
+        RewriteRule ^ - [L,R=503]
+        ErrorDocument 503 /index.html
+    </VirtualHost>
+    # conditional, include lines
