@@ -4,7 +4,10 @@ Changelog
 0.6.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Moved some general functionality into the ApacheBase class for reuse elsewhere
+- Added isotoma.recipe.apache:maintenance to provide an apache configuration
+  for a site which will return 503s for each request, and display a predefined
+  maintenance page.
 
 
 0.6.13 (2011-12-19)
