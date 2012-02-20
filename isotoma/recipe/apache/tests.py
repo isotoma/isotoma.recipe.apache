@@ -42,6 +42,7 @@ def test_suite():
         "doctests/apache.txt",
         "doctests/apache-rewrites.txt",
         "doctests/apache-request-header.txt",
+        "doctests/apache-header.txt",
         "doctests/apache-wsgi.txt",
         "doctests/apache-wsgi-ssl.txt",
         "doctests/apache-wsgi-auth.txt",
