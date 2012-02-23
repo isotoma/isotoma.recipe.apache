@@ -16,7 +16,6 @@ import logging
 import os
 import shutil
 import zc.buildout
-import hashlib
 
 from jinja2 import Environment, PackageLoader, ChoiceLoader, FunctionLoader, FileSystemLoader
 
@@ -331,22 +330,16 @@ class ApacheMaintenance(ApacheBase):
         options.setdefault("maintenance_page", "index.html")
 
     def _should_copy_files(self, src, dest):
-        def md5sum(filename, block_size=2**20):
-            md5 = hashlib.md5()
+        def _sha(filename):
             f = open(filename, 'rb')
-            while True:
-                data = f.read(block_size)
-                if not data:
-                    break
-                md5.update(data)
-            return md5.hexdigest()
+            return sha1(f.read())
 
         def snapshot_directory(directory):
             files = {}
             for dirpath, dirnames, filenames in os.walk(src):
                 for filename in filenames:
                     path = os.path.join(dirpath, filename)
-                    files[path] = md5sum(path)
+                    files[path] = _sha(path)
             return files
 
         if not os.path.exists(dest):
