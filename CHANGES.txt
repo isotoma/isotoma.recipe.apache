@@ -1,16 +1,16 @@
 Changelog
 =========
 
-0.6.16 (unreleased)
+0.6.16 (2012-02-27)
 -------------------
 
-- Nothing changed yet.
+- Add sendfile option to the wsgi recipe to enable mod_xsendfile
 
 
 0.6.15 (2012-02-23)
 -------------------
 
-- Nothing changed yet.
+- bugfix to regain python2.4 compatibility
 
 
 0.6.14 (2012-02-20)
