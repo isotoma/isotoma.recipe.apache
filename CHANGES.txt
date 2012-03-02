@@ -6,6 +6,8 @@ Changelog
 
 - Fix case where ``${:ssl}`` is auto.
 
+- Find all doctests automatically
+
 
 0.6.17 (2012-03-02)
 -------------------

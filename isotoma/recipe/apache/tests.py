@@ -1,7 +1,7 @@
 """Test setup for isotoma.recipe.apache.
 """
 
-import os, re
+import os, re, glob
 import pkg_resources
 
 import zc.buildout.testing
@@ -39,27 +39,12 @@ class OutputChecker(doctest.OutputChecker):
 
 
 def test_suite():
-    tests = [
-        "doctests/apache.txt",
-        "doctests/apache-rewrites.txt",
-        "doctests/apache-request-header.txt",
-        "doctests/apache-header.txt",
-        "doctests/apache-autowww.txt",
-        "doctests/apache-wsgi.txt",
-        "doctests/apache-wsgi-ssl.txt",
-        "doctests/apache-wsgi-auth.txt",
-        "doctests/apache-wsgi-protected.txt",
-        "doctests/apache-redirect.txt",
-        "doctests/apache-redirect-ssl.txt",
-        "doctests/apache-redirect-additional-params.txt",
-        "doctests/includes.txt",
-        "doctests/apache-ldap.txt",
-        "doctests/apache-ssl.txt",
-        "doctests/apache-maintenance.txt",
-        ]
+    d = os.path.join(os.path.dirname(__file__))
+    testglob = os.path.join(d, "doctests", "*.txt")
 
     suites = []
-    for test in tests:
+    for test in glob.glob(testglob):
+        test = os.path.relpath(test, d)
         suites.append(doctest.DocFileSuite(test,
             setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
             optionflags=doctest.ELLIPSIS + doctest.NORMALIZE_WHITESPACE, checker=OutputChecker()))
