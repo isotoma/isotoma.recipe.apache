@@ -37,9 +37,9 @@ The template was indeed created::
   <VirtualHost 192.168.0.99:80>
       ServerName localhost
       ServerAdmin nobody@localhost
-      CustomLog /var/log/apache2/localhost-access.log combined
   <BLANKLINE>
-      ErrorLog "|/usr/bin/awk \"'\"'{$8=\"0.0.0.0]\"; print}'\"'\" >> /var/log/apache2/localhost-error.log"
+      CustomLog /var/log/apache2/localhost-access.log "0.0.0.0 %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
+      ErrorLog /var/log/apache2/localhost-error.log
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
