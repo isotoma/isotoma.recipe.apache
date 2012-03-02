@@ -4,7 +4,7 @@ Changelog
 0.6.17 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix handling of ``${:auto-www}`` and updated regression tests accordingly.
 
 
 0.6.16 (2012-02-27)

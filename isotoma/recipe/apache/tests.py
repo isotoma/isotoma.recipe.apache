@@ -13,6 +13,7 @@ def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)
     zc.buildout.testing.install_develop('isotoma.recipe.apache', test)
     zc.buildout.testing.install('Jinja2', test)
+    zc.buildout.testing.install('missingbits', test)
 
 
 class OutputChecker(doctest.OutputChecker):
@@ -43,6 +44,7 @@ def test_suite():
         "doctests/apache-rewrites.txt",
         "doctests/apache-request-header.txt",
         "doctests/apache-header.txt",
+        "doctests/apache-autowww.txt",
         "doctests/apache-wsgi.txt",
         "doctests/apache-wsgi-ssl.txt",
         "doctests/apache-wsgi-auth.txt",

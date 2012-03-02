@@ -32,6 +32,7 @@ setup(
         'setuptools',
         'zc.buildout',
         'Jinja2',
+        'missingbits >= 0.0.14',
     ],
     entry_points = {
         "zc.buildout": [

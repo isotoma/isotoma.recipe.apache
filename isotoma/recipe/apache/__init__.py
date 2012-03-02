@@ -26,6 +26,8 @@ except ImportError:
     def sha1(str):
         return sha.new(str)
 
+import missingbits
+
 import htpasswd
 
 def sibpath(filename):
@@ -175,9 +177,6 @@ class ApacheBase(object):
         if self.use_ssl():
             # turn a list of sslca's into an actual list
             ssldict["sslca"] = [x.strip() for x in self.options.get("sslca", "").strip().split()]
-            ssldict["aliases"] = [x.strip() for x in self.options.get("aliases", "").strip().split()]
-            ssldict["redirects"] = [x.strip() for x in self.options.get("redirects", "").strip().split()]
-
             # grab ssl chain file
             ssldict["sslcachainfile"] = self.options.get("sslcachainfile", "")
 
@@ -214,6 +213,23 @@ class ApacheBase(object):
 
         return static_aliases
 
+    def get_common_options(self):
+        opt = self.options.copy()
+        opt = dict(opt.items() + self.configure_ssl().items())
+
+        for key in ("aliases", "redirects"):
+            if key in self.options:
+                opt[key] = self.options.get_list(key)
+            else:
+                opt[key] =[]
+
+        opt['rewrites'] = self.configure_rewrites()
+
+        # if we have auto-www on, add additional alias:
+        self.configure_auto_www(opt["redirects"])
+
+        return opt
+
 
 class Apache(ApacheBase):
 
@@ -227,18 +243,11 @@ class Apache(ApacheBase):
     def install(self):
         if not os.path.isdir(self.outputdir):
             os.mkdir(self.outputdir)
-        opt = self.options.copy()
 
-        # SSL, if required
-        opt = dict(opt.items() + self.configure_ssl().items())
+        opt = self.get_common_options()
 
         # Deal with authentication
         opt["protected"] = self.use_protection()
-
-        opt['rewrites'] = self.configure_rewrites()
-
-        # if we have auto-www on, add additional alias:
-        self.configure_auto_www(opt["rewrites"])
 
         opt['requestheader'] = self.get_requestheader()
         opt['header'] = self.get_header()
@@ -275,8 +284,8 @@ class ApacheWSGI(ApacheBase):
         if not os.path.exists(outputdir):
             os.makedirs(outputdir)
 
-        opt = self.options.copy()
-        
+        opt = self.get_common_options()
+
         wsgi = opt['wsgi']
         if wsgi[0] == '/':
             # probably not a relative path in this case
@@ -302,9 +311,6 @@ class ApacheWSGI(ApacheBase):
         opt['static_aliases'] = self.configure_static_aliases()
 
         opt = dict(opt.items() + self.configure_ssl().items())
-
-        opt["rewrites"] = self.configure_rewrites()
-        self.configure_auto_www(opt["rewrites"])
 
         if opt.get('ldapserver', ''):
             # include the ldap config
