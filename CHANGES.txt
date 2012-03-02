@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.17 (unreleased)
+0.6.17 (2012-03-02)
 -------------------
 
 - Fix handling of ``${:auto-www}`` and updated regression tests accordingly.
