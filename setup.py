@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.6.17'
+version = '0.6.18dev'
 
 setup(
     name = 'isotoma.recipe.apache',
