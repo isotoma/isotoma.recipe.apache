@@ -4,7 +4,7 @@ Changelog
 0.6.18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix case where ``${:ssl}`` is auto.
 
 
 0.6.17 (2012-03-02)

@@ -22,7 +22,6 @@ Lets create a minimal `buildout.cfg` file::
   ... configfile = apache.cfg
   ... serveradmin = nobody@localhost
   ... interface = 192.168.0.99
-  ... ssl = on
   ... sslcert = /etc/ssl/certs/${:sitename}.crt
   ... sslkey = /etc/ssl/private/${:sitename}.key
   ... sslcachainfile = /etc/ssl/certs/${:sitename}-intermediates.crt

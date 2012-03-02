@@ -55,6 +55,7 @@ class ApacheBase(object):
         options.setdefault("logdir", "/var/log/apache2")
         options.setdefault("http_port", "80")
         options.setdefault("https_port", "443")
+        options.setdefault("ssl", "auto")
 
         self.options.setdefault("namevirtualhost", "")
 
@@ -161,11 +162,11 @@ class ApacheBase(object):
         return protected
 
     def use_ssl(self):
-        ssl = self.options.get("ssl", "auto")
+        ssl = self.options["ssl"]
 
         if ssl == "auto":
             if "sslcert" in self.options:
-                return "on"
+                return True
 
         if ssl == "only":
             return "only"
@@ -174,7 +175,8 @@ class ApacheBase(object):
 
     def configure_ssl(self):
         ssldict = {}
-        if self.use_ssl():
+        use_ssl = ssldict["ssl"] = self.use_ssl()
+        if use_ssl:
             # turn a list of sslca's into an actual list
             ssldict["sslca"] = [x.strip() for x in self.options.get("sslca", "").strip().split()]
             # grab ssl chain file
