@@ -4,7 +4,9 @@ Changelog
 0.6.20 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add a strict_domains setting which 403's unpermitted domain access.
+
+- Make redirects permanent
 
 
 0.6.19 (2012-05-25)

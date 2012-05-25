@@ -21,6 +21,7 @@ Lets create a minimal `buildout.cfg` file::
   ... aliases =
   ...     alias.local
   ...     otheralias.local
+  ... strict_domains = true
   ... vhm_sitename = %{HTTP_HOST}
   ... proxyport = 8080
   ... ''')
@@ -29,7 +30,7 @@ Now we can run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache.
-  Unused options for apache: 'proxyport' 'serveradmin' 'interface'.
+  Unused options for apache: 'proxyport' 'strict_domains' 'serveradmin' 'interface'.
 
 The template was indeed created::
 
@@ -49,6 +50,12 @@ The template was indeed created::
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} !^localhost$ [NC]
+  RewriteCond %{HTTP_HOST} !^alias\.local$ [NC]
+  RewriteCond %{HTTP_HOST} !^otheralias\.local$ [NC]
+  RewriteRule .? - [F,L]
+  RewriteEngine Off
   <BLANKLINE>
       ProxyPreserveHost On
       <Proxy *>
