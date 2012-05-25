@@ -25,7 +25,7 @@ Now we can run buildout::
 
   >>> print system(join('bin', 'buildout')),
   Installing apache.
-  Unused options for apache: 'proxyport' 'sitename' 'serveradmin' 'interface'.
+  Unused options for apache: 'proxyport' 'serveradmin' 'interface'.
 
 The template was indeed created::
 

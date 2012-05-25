@@ -241,6 +241,7 @@ class Apache(ApacheBase):
         super(Apache, self).__init__(buildout, name, options)
 
         self.options.setdefault("portal", "portal")
+        options.setdefault("vhm_sitename", options["sitename"])
 
     def install(self):
         if not os.path.isdir(self.outputdir):

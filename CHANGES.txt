@@ -4,7 +4,8 @@ Changelog
 0.6.19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Plone recipe can now construct VHM rewrites that use %{HTTP_HOST} - allowing
+  a single vhost to serve multiple domains via ServerAlias.
 
 
 0.6.18 (2012-03-02)

@@ -1,8 +1,8 @@
 Detailed Description
 ********************
 
-Set RequestHeader from buildout
-===============================
+Simple creation of an apache config
+===================================
 
 Lets create a minimal `buildout.cfg` file::
 
@@ -18,8 +18,11 @@ Lets create a minimal `buildout.cfg` file::
   ... serveradmin = nobody@localhost
   ... interface = 192.168.0.99
   ... sitename = localhost
+  ... aliases =
+  ...     alias.local
+  ...     otheralias.local
+  ... vhm_sitename = %{HTTP_HOST}
   ... proxyport = 8080
-  ... requestheader.plone_skin = Sunburst
   ... ''')
 
 Now we can run buildout::
@@ -36,6 +39,8 @@ The template was indeed created::
   <BLANKLINE>
   <VirtualHost 192.168.0.99:80>
       ServerName localhost
+      ServerAlias alias.local
+      ServerAlias otheralias.local
       ServerAdmin nobody@localhost
   <BLANKLINE>
       CustomLog /var/log/apache2/localhost-access.log combined
@@ -44,7 +49,6 @@ The template was indeed created::
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
-  RequestHeader set plone_skin "Sunburst"
   <BLANKLINE>
       ProxyPreserveHost On
       <Proxy *>
@@ -55,7 +59,7 @@ The template was indeed created::
       RewriteEngine On
   <BLANKLINE>
   <BLANKLINE>
-      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/$1 [L,P]
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/%{HTTP_HOST}:80/portal/VirtualHostRoot/$1 [L,P]
   </VirtualHost>
   <BLANKLINE>
   <BLANKLINE>
