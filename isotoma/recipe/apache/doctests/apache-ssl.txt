@@ -49,7 +49,7 @@ The template was indeed created::
   <BLANKLINE>
       ProxyRequests Off
       RewriteEngine On
-      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+      RewriteRule /(.*)$ https://www.example.com/$1 [R=permanent]
   </VirtualHost>
   <BLANKLINE>
   <VirtualHost 192.168.0.99:80>
@@ -65,7 +65,7 @@ The template was indeed created::
       ProxyRequests Off 
       RewriteEngine On
   <BLANKLINE>
-      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+      RewriteRule /(.*)$ https://www.example.com/$1 [R=permanent]
   <BLANKLINE>
   </VirtualHost>
   <VirtualHost 192.168.0.99:80>
@@ -81,7 +81,7 @@ The template was indeed created::
       ProxyRequests Off 
       RewriteEngine On
   <BLANKLINE>
-      RewriteRule /(.*)$ https://www.example.com/$1 [R]
+      RewriteRule /(.*)$ https://www.example.com/$1 [R=permanent]
   <BLANKLINE>
   </VirtualHost>
   <BLANKLINE>

@@ -39,7 +39,7 @@ The template was indeed created::
       ErrorLog /var/log/apache2/www.localhost-error.log
       ProxyRequests Off
       RewriteEngine On
-      RewriteRule /(.*)$ http://localhost/$1 [R]
+      RewriteRule /(.*)$ http://localhost/$1 [R=permanent]
   </VirtualHost>
   <BLANKLINE>
   <VirtualHost 192.168.0.99:80>
