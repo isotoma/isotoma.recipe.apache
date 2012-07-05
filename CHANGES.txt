@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.1 (unreleased)
+1.0.1 (2012-07-05)
 ------------------
 
 - Prever SERVER_NAME over HTTP_HOST and force UseCanonicalName to Off (the
