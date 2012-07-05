@@ -46,10 +46,11 @@ The template was indeed created::
       CustomLog /var/log/apache2/www.example.com-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/www.example.com-error.log
+      UseCanonicalName Off
   <BLANKLINE>
       ProxyRequests Off
       RewriteEngine On
-      RewriteRule /(.*)$ https://www.example.com/$1 [R=permanent]
+      RewriteRule /(.*)$ https://%{SERVER_NAME}/$1 [R=permanent]
   </VirtualHost>
   <BLANKLINE>
   <VirtualHost 192.168.0.99:80>
@@ -61,6 +62,7 @@ The template was indeed created::
       CustomLog /var/log/apache2/another-example.com;https://www.example.com/another-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/another-example.com;https://www.example.com/another-error.log
+      UseCanonicalName Off
   <BLANKLINE>
       ProxyRequests Off 
       RewriteEngine On
@@ -77,6 +79,7 @@ The template was indeed created::
       CustomLog /var/log/apache2/www.another-example.com;https://www.example.com/another-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/www.another-example.com;https://www.example.com/another-error.log
+      UseCanonicalName Off
   <BLANKLINE>
       ProxyRequests Off 
       RewriteEngine On
@@ -93,6 +96,7 @@ The template was indeed created::
       CustomLog /var/log/apache2/ssl-www.example.com-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/ssl-www.example.com-error.log
+      UseCanonicalName Off
   <BLANKLINE>
       SSLEngine on
       SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL

@@ -243,7 +243,6 @@ if version:
 cmd.append(requirement)
 
 if is_jython:
-    import subprocess
     exitcode = subprocess.Popen(cmd, env=env).wait()
 else: # Windows prefers this, apparently; otherwise we would prefer subprocess
     exitcode = os.spawnle(*([os.P_WAIT, sys.executable] + cmd + [env]))
@@ -256,8 +255,29 @@ if exitcode != 0:
     sys.exit(exitcode)
 
 ws.add_entry(eggs_dir)
-ws.require(requirement)
+try:
+    ws.require(requirement)
+except pkg_resources.DistributionNotFound, e:
+    if e.args[0].project_name == 'zc.buildout':
+        print "Couldn't install %s." % str(e.args[0])
+        print "This could be due to you having a system-installed " \
+              "python-zc.buildout package."
+        print "I'm going to attempt to bootstrap your project using the system buildout"
+
+        argstring = ",".join("'%s'" % a for a in args)
+        cmd = [sys.executable, "-c", "import zc.buildout.buildout; zc.buildout.buildout.main([%s])" % argstring]
+        print subprocess.list2cmdline(cmd)
+        exitcode = subprocess.Popen(cmd).wait()
+        if exitcode != 0:
+            sys.stdout.flush()
+            sys.stderr.flush()
+            print "An error occurred - i think you should remove the system installed buildout"
+            sys.exit(1)
+        sys.exit(0)
+    raise
+
 import zc.buildout.buildout
 zc.buildout.buildout.main(args)
 if not options.eggs: # clean up temporary egg directory
     shutil.rmtree(eggs_dir)
+

@@ -40,6 +40,7 @@ The template was indeed created::
   <BLANKLINE>
       CustomLog /var/log/apache2/localhost-access.log "0.0.0.0 %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>

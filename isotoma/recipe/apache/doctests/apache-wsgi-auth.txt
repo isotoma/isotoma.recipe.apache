@@ -51,6 +51,7 @@ Let's check that the template was created::
       ServerAdmin test@example.com
       CustomLog /var/log/apache2/example.com-access.log combined
       ErrorLog /var/log/apache2/example.com-error.log
+      UseCanonicalName Off
   <BLANKLINE>
       <Location />
           Options Indexes FollowSymLinks MultiViews

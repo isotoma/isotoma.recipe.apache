@@ -37,6 +37,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
       Options -Indexes
   <BLANKLINE>
   <BLANKLINE>
@@ -88,6 +89,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
       Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
@@ -143,6 +145,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
       Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
@@ -200,6 +203,7 @@ The template was indeed created::
       ServerAdmin nobody@localhost
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
       Options -Indexes
   <BLANKLINE>
       WSGIDaemonProcess site1 user=www-data group=www-data processes=50 threads=9001
@@ -251,6 +255,7 @@ directive::
       CustomLog /var/log/apache2/localhost-access.log combined
       ErrorLog /var/log/apache2/localhost-error.log
   <BLANKLINE>
+      UseCanonicalName Off
   <BLANKLINE>
   <BLANKLINE>
       WSGIScriptAlias / /bin/foo.wsgi

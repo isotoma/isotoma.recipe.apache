@@ -42,6 +42,7 @@ The template was indeed created::
       CustomLog /var/log/apache2/localhost-access.log combined
   <BLANKLINE>
       ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>

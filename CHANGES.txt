@@ -4,7 +4,8 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Prever SERVER_NAME over HTTP_HOST and force UseCanonicalName to Off (the
+  default) so that SERVER_NAME will be the same as HTTP_HOST.
 
 
 1.0.0 (2012-05-25)

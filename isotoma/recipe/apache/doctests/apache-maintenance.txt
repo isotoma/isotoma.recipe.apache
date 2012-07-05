@@ -34,8 +34,9 @@ Now we can run buildout::
         ServerAdmin nobody@localhost
         CustomLog /var/log/apache2/example.com-access.log combined
         ErrorLog /var/log/apache2/example.com-error.log
+        UseCanonicalName Off
         RewriteEngine On
-        RewriteRule /(.*)$ https://example.com/$1 [R=permanent]
+        RewriteRule /(.*)$ https://%{SERVER_NAME}/$1 [R=permanent]
     </VirtualHost>
     <BLANKLINE>
     <VirtualHost 209.85.229.99:443>
@@ -43,6 +44,7 @@ Now we can run buildout::
         ServerAdmin nobody@localhost
         CustomLog /var/log/apache2/ssl-example.com-access.log combined
         ErrorLog /var/log/apache2/ssl-example.com-error.log
+        UseCanonicalName Off
     <BLANKLINE>
         SSLEngine on
         SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL

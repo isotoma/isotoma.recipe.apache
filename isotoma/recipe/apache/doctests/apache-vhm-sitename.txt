@@ -22,7 +22,7 @@ Lets create a minimal `buildout.cfg` file::
   ...     alias.local
   ...     otheralias.local
   ... strict_domains = true
-  ... vhm_sitename = %{HTTP_HOST}
+  ... vhm_sitename = %{SERVER_NAME}
   ... proxyport = 8080
   ... ''')
 
@@ -48,12 +48,13 @@ The template was indeed created::
   <BLANKLINE>
       ErrorLog /var/log/apache2/localhost-error.log
   <BLANKLINE>
+      UseCanonicalName Off
   <BLANKLINE>
   <BLANKLINE>
   RewriteEngine On
-  RewriteCond %{HTTP_HOST} !^localhost$ [NC]
-  RewriteCond %{HTTP_HOST} !^alias\.local$ [NC]
-  RewriteCond %{HTTP_HOST} !^otheralias\.local$ [NC]
+  RewriteCond %{SERVER_NAME} !^localhost$ [NC]
+  RewriteCond %{SERVER_NAME} !^alias\.local$ [NC]
+  RewriteCond %{SERVER_NAME} !^otheralias\.local$ [NC]
   RewriteRule .? - [F,L]
   RewriteEngine Off
   <BLANKLINE>
@@ -66,7 +67,7 @@ The template was indeed created::
       RewriteEngine On
   <BLANKLINE>
   <BLANKLINE>
-      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/%{HTTP_HOST}:80/portal/VirtualHostRoot/$1 [L,P]
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/%{SERVER_NAME}:80/portal/VirtualHostRoot/$1 [L,P]
   </VirtualHost>
   <BLANKLINE>
   <BLANKLINE>

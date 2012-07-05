@@ -42,6 +42,7 @@ The template was indeed created::
   <BLANKLINE>
       ErrorLog /var/log/apache2/localhost-error.log
   <BLANKLINE>
+      UseCanonicalName Off
   <BLANKLINE>
   <BLANKLINE>
   Header set sitename "www.example.com"
