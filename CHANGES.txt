@@ -4,7 +4,7 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Support IP whitelisting as well as username/password
 
 
 1.0.1 (2012-07-05)

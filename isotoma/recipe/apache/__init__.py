@@ -219,7 +219,7 @@ class ApacheBase(object):
         opt = self.options.copy()
         opt = dict(opt.items() + self.configure_ssl().items())
 
-        for key in ("aliases", "redirects"):
+        for key in ("aliases", "redirects", "allowips"):
             if key in self.options:
                 opt[key] = self.options.get_list(key)
             else:
