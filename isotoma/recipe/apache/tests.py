@@ -19,8 +19,10 @@ def setUp(test):
 class OutputChecker(doctest.OutputChecker):
 
     regexp = re.compile('<BLANKLINE>\n')
+    byebyecomments = re.compile('#.*\n')
 
     def transform(self, inp):
+        inp = self.byebyecomments.sub('', inp)
         inp = self.regexp.sub('', inp)
         lines = [x.strip() for x in inp.split('\n') if x.strip()]
         return lines
