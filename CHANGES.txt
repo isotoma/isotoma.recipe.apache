@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
+1.0.3 (2012-11-26)
 ------------------
 
 - Set a Jinja2 ``line_statement_prefix`` of ``%``. This allows for much better
