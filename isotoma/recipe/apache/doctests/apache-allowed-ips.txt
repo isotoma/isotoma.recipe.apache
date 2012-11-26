@@ -1,0 +1,151 @@
+Detailed Description
+********************
+
+Simple ip whitelisted apache config
+===================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache
+  ... offline = true
+  ...
+  ... [apache]
+  ... recipe = isotoma.recipe.apache
+  ... configfile = apache.cfg
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99
+  ... sitename = localhost
+  ... proxyport = 8080
+  ... allowips =
+  ...     127.0.0.1
+  ...     192.168.1.1
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Installing apache.
+  Unused options for apache: 'proxyport' 'serveradmin' 'interface'.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+      ServerName localhost
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/localhost-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
+  <BLANKLINE>
+      <Location />
+      Options Indexes FollowSymLinks MultiViews
+      Order Deny,Allow
+      deny from all
+      allow from 127.0.0.1
+      allow from 192.168.1.1
+      </Location>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      ProxyPreserveHost On
+      <Proxy *>
+         Allow from all
+      </Proxy>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+  <BLANKLINE>
+  <BLANKLINE>
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/$1 [L,P]
+  </VirtualHost>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  # conditional, include lines
+
+Simple ip whitelisted apache config
+===================================
+
+Lets create a minimal `buildout.cfg` file::
+
+  >>> write('buildout.cfg',
+  ... '''
+  ... [buildout]
+  ... parts = apache
+  ... offline = true
+  ...
+  ... [apache]
+  ... recipe = isotoma.recipe.apache
+  ... configfile = apache.cfg
+  ... serveradmin = nobody@localhost
+  ... interface = 192.168.0.99
+  ... sitename = localhost
+  ... proxyport = 8080
+  ... username = andy
+  ... password = penguin55
+  ... realm = ${:sitename}
+  ... allowips =
+  ...     127.0.0.1
+  ...     192.168.1.1
+  ... ''')
+
+Now we can run buildout::
+
+  >>> print system(join('bin', 'buildout')),
+  Uninstalling apache.
+  Installing apache.
+
+The template was indeed created::
+
+  >>> cat('apache.cfg')
+  # vim: syntax=apache:
+  <BLANKLINE>
+  <BLANKLINE>
+  <VirtualHost 192.168.0.99:80>
+      ServerName localhost
+      ServerAdmin nobody@localhost
+  <BLANKLINE>
+      CustomLog /var/log/apache2/localhost-access.log combined
+  <BLANKLINE>
+      ErrorLog /var/log/apache2/localhost-error.log
+      UseCanonicalName Off
+  <BLANKLINE>
+      <Location />
+      Options Indexes FollowSymLinks MultiViews
+      satisfy any
+      Order Deny,Allow
+      deny from all
+      allow from 127.0.0.1
+      allow from 192.168.1.1
+      AuthType Basic
+      AuthName "localhost"
+      ...
+      Require user andy
+      </Location>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      ProxyPreserveHost On
+      <Proxy *>
+         Allow from all
+      </Proxy>
+      ProxyRequests Off
+  <BLANKLINE>
+      RewriteEngine On
+  <BLANKLINE>
+  <BLANKLINE>
+      RewriteRule ^/(.*)$ http://localhost:8080/VirtualHostBase/http/localhost:80/portal/VirtualHostRoot/$1 [L,P]
+  </VirtualHost>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  # conditional, include lines
+
