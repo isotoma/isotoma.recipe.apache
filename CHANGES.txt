@@ -13,6 +13,8 @@ Changelog
 
   This avoids the whitespace mess that plagues the current templates.
 
+- Update built in templates to have less whitespace noise
+
 - IP whitelisting fixes (Deny before allow, prevent 2 <Location /> stanzas from
   interracting).
 
