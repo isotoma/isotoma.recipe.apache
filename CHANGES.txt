@@ -4,7 +4,8 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- IP whitelisting fixes (Deny before allow, prevent 2 <Location /> stanzas from
+  interracting).
 
 
 1.0.2 (2012-10-09)
