@@ -4,6 +4,15 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
+- Set a Jinja2 ``line_statement_prefix`` of ``%``. This allows for much better
+  whitespace control in templates::
+
+      % if requestheader is defined
+      // DO STUFF
+      % endif
+
+  This avoids the whitespace mess that plagues the current templates.
+
 - IP whitelisting fixes (Deny before allow, prevent 2 <Location /> stanzas from
   interracting).
 

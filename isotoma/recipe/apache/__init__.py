@@ -105,7 +105,7 @@ class ApacheBase(object):
             PackageLoader('isotoma.recipe.apache', 'templates'),
             ])
 
-        template = Environment(loader=loader).get_template(basename)
+        template = Environment(loader=loader, line_statement_prefix='%').get_template(basename)
         rendered = template.render(opt)
 
         cfgfilename = self.options['configfile']
