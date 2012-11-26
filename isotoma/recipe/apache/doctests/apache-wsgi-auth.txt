@@ -55,7 +55,7 @@ Let's check that the template was created::
   <BLANKLINE>
       <Location />
           Options Indexes FollowSymLinks MultiViews
-          Order Allow,Deny
+          Order Deny,Allow
           allow from all
           AuthType Basic
           AuthName "something somewhere"
