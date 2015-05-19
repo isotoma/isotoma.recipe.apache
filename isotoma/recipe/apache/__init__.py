@@ -267,7 +267,7 @@ class Apache(ApacheBase):
         return [self.outputdir]
 
     def update(self):
-        pass
+        return self.install()
 
 
 class ApacheWSGI(ApacheBase):
@@ -421,7 +421,7 @@ class Redirect(ApacheBase):
         return [outputdir]
 
     def update(self):
-        pass
+        return self.install()
 
 class Includes(ApacheBase):
 
